@@ -1,0 +1,7 @@
+export enum EFormActionType {
+  DISABLE_FORM,
+  INPUT_CHANGE,
+  ADD_INPUTS,
+  UPDATE_INPUTS,
+  REMOVE_INPUTS,
+}

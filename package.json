@@ -1,0 +1,40 @@
+{
+	"name": "react-form-manager",
+	"version": "1.0.0",
+	"description": "Form manager",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+		"lint": "tslint -p tsconfig.json",
+		"build": "tsc",
+		"prepare": "npm run build",
+		"prepublishOnly": "npm run lint",
+		"preversion": "npm run lint",
+		"version": "npm run format && git add -A src",
+		"postversion": "git push && git push --tags"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/valentino-drappa/react-form-manager.git"
+	},
+	"keywords": ["react", "form", "form manager"],
+	"author": "Valentino Drappa",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/valentino-drappa/react-form-manager/issues"
+	},
+	"homepage": "https://github.com/valentino-drappa/react-form-manager#readme",
+	"devDependencies": {
+		"@types/react": "^16.9.23",
+		"prettier": "^1.19.1",
+		"tslint": "^6.0.0",
+		"tslint-config-prettier": "^1.18.0",
+		"typescript": "^3.8.3"
+	},
+	"dependencies": {
+		"react": "^16.13.0"
+	},
+	"files": ["lib/**/*"]
+}
