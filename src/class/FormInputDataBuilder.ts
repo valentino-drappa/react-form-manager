@@ -4,9 +4,9 @@ import { IFormInputValidator } from '../interface/forminput/FormInputValidator.i
 import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
 import validateFormInput from '../utils/formInputsValidator.utils';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInput } from './FormInput';
+import { FormInputData } from './FormInputData';
 
-export class FormInputBuilder implements IFormInputData {
+export class FormInputDataBuilder implements IFormInputData {
   id?: string;
   type: EFormInputType;
   name: string;
@@ -40,29 +40,29 @@ export class FormInputBuilder implements IFormInputData {
     return arrayIn && Array.isArray(arrayIn) && arrayIn.length > 0;
   }
 
-  addId(id: string): FormInputBuilder {
+  addId(id: string): FormInputDataBuilder {
     this.id = id;
     return this;
   }
 
-  addValue(value: any): FormInputBuilder {
+  addValue(value: any): FormInputDataBuilder {
     this.value = this.getDefaultValue(this.type, value);
     return this;
   }
 
-  addDisabled(disabled: boolean): FormInputBuilder {
+  addDisabled(disabled: boolean): FormInputDataBuilder {
     this.disabled = disabled == null ? false : disabled;
     return this;
   }
 
-  addClassNames(classNames: string[]): FormInputBuilder {
+  addClassNames(classNames: string[]): FormInputDataBuilder {
     if (this.isValidArray(classNames)) {
       this.classNames = classNames;
     }
     return this;
   }
 
-  addValidators(validators: [IFormInputValidator]): FormInputBuilder {
+  addValidators(validators: [IFormInputValidator]): FormInputDataBuilder {
     if (
       this.isValidArray(validators) &&
       (this.type === EFormInputType.INPUT_TYPE_TEXT ||
@@ -74,11 +74,11 @@ export class FormInputBuilder implements IFormInputData {
     return this;
   }
 
-  addAvailableValue(value: any, label: any): FormInputBuilder {
+  addAvailableValue(value: any, label: any): FormInputDataBuilder {
     return this.addAvailableValueList([{ value, label }]);
   }
 
-  addAvailableValueList(valueList: [any]): FormInputBuilder {
+  addAvailableValueList(valueList: [any]): FormInputDataBuilder {
     if (!this.isValidArray(valueList)) {
       return this;
     }
@@ -89,7 +89,7 @@ export class FormInputBuilder implements IFormInputData {
     return this;
   }
 
-  addLabel(label: any): FormInputBuilder {
+  addLabel(label: any): FormInputDataBuilder {
     this.label = label;
     return this;
   }
@@ -99,7 +99,7 @@ export class FormInputBuilder implements IFormInputData {
     return this;
   }
 
-  removeProperty(propertyName: any): FormInputBuilder {
+  removeProperty(propertyName: any): FormInputDataBuilder {
     delete this.properties[propertyName];
     return this;
   }
@@ -119,7 +119,7 @@ export class FormInputBuilder implements IFormInputData {
   };
 
   build(): IFormStateInputs {
-    const formInputData = new FormInput(this);
+    const formInputData = new FormInputData(this);
     formInputData.value = this.getDefaultFormInputValue(formInputData.type, formInputData.value);
     formInputData.errors = validateFormInput(formInputData.value, formInputData.validators);
     formInputData.isValid = !formInputData.errors.length;

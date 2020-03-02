@@ -1,6 +1,6 @@
 {
 	"name": "vdr-react-form-manager",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Form manager",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -25,17 +25,16 @@
 	"bugs": {
 		"url": "https://github.com/valentino-drappa/react-form-manager/issues"
 	},
+	"bundleDependencies": false,
 	"homepage": "https://github.com/valentino-drappa/react-form-manager#readme",
 	"devDependencies": {
 		"@types/react": "^16.9.23",
 		"prettier": "^1.19.1",
+		"react": "^16.9.0",
 		"tslint": "^6.0.0",
 		"tslint-config-prettier": "^1.18.0",
 		"typescript": "^3.8.3"
 	},
-	"dependencies": {
-		"basic": "^2.0.3",
-		"react": "^16.13.0"
-	},
+	"dependencies": {},
 	"files": ["lib/**/*"]
 }

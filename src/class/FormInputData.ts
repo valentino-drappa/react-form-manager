@@ -2,9 +2,9 @@ import { IFormInputData } from '../interface/forminput/FormInputData.interface';
 import { EFormInputType } from '../enum/FormInputType.enum';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInputBuilder } from './FormInputBuilder';
+import { FormInputDataBuilder } from './FormInputDataBuilder';
 
-export class FormInput implements IFormInputData {
+export class FormInputData implements IFormInputData {
   id?: string;
   type: EFormInputType;
   name: string;
@@ -34,6 +34,6 @@ export class FormInput implements IFormInputData {
   }
 
   static Builder(type: EFormInputType, name: string) {
-    return new FormInputBuilder(type, name);
+    return new FormInputDataBuilder(type, name);
   }
 }
