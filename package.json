@@ -1,5 +1,5 @@
 {
-	"name": "react-form-manager",
+	"name": "vdr-react-form-manager",
 	"version": "1.0.0",
 	"description": "Form manager",
 	"main": "lib/index.js",
@@ -34,6 +34,7 @@
 		"typescript": "^3.8.3"
 	},
 	"dependencies": {
+		"basic": "^2.0.3",
 		"react": "^16.13.0"
 	},
 	"files": ["lib/**/*"]

@@ -8,11 +8,11 @@ import { EFormActionType } from './enum/FormActionType.enum';
 import { IFormStateInputs } from './interface/form/FormStateInptus.interface';
 import { IFormInputMutation } from './interface/forminput/mutation/FormInputMutation.interface';
 
-function init({ formInputs, formValidators }: IFormInitalState): IFormState {
-  return generateFormState(formInputs, formValidators, false);
-}
-
 export default function formManager(formInitialStateValues: IFormInitalState) {
+  function init({ formInputs, formValidators }: IFormInitalState): IFormState {
+    return generateFormState(formInputs, formValidators, false);
+  }
+
   const emitLastFieldUpdated = useRef(true);
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
