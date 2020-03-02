@@ -2,7 +2,7 @@ import { IFormInputData } from '../interface/forminput/FormInputData.interface';
 import { EFormInputType } from '../enum/FormInputType.enum';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
-import validateFormInput from '../utils/formInputsValidator.utils';
+import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
 import { FormInputData } from './FormInputData';
 

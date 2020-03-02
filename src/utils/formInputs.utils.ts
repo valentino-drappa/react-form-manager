@@ -1,6 +1,6 @@
 import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
 import { IFormInputData } from '../interface/forminput/FormInputData.interface';
-import validateFormInput from './formInputsValidator.utils';
+import { validateFormInput } from './formInputsValidator.utils';
 import { IFormState } from '../interface/form/FormState.interface';
 import { generateFormState } from './form.utils';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';

@@ -1,6 +1,6 @@
-import { IFormInputValidator } from "../interface/forminput/FormInputValidator.interface";
+import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 
-const validateFormInput = (value: string, models: IFormInputValidator[] | null | undefined): string[] => {
+export const validateFormInput = (value: string, models: IFormInputValidator[] | null | undefined): string[] => {
   const errors: string[] = [];
   if (!models || !models.length) {
     return errors;
@@ -13,5 +13,3 @@ const validateFormInput = (value: string, models: IFormInputValidator[] | null |
   });
   return errors;
 };
-
-export default validateFormInput;

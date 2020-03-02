@@ -2,8 +2,8 @@
 	"name": "vdr-react-form-manager",
 	"version": "1.0.1",
 	"description": "Form manager",
-	"main": "lib/index.js",
-	"types": "lib/index.d.ts",
+	"main": "build/index.js",
+	"types": "build/index.d.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
