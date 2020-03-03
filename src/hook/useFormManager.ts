@@ -13,6 +13,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     return generateFormState(formInputs, formValidators, false);
   }
 
+  const formInitalValues = useRef(formInitialStateValues);
   const emitLastFieldUpdated = useRef(true);
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
@@ -36,7 +37,12 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     );
   }
 
+  function resetForm() {
+    init(formInitalValues.current);
+  }
+
   return {
+    resetForm,
     handleFormChange: (e: any) => _handleFormChange(e),
     getFormValues: () => _getFormValues(),
     getInput: (inputName: string) => _getInput(inputName),
