@@ -27,15 +27,6 @@ export class FormInputDataBuilder implements IFormInputData {
     this.isValid = true;
   }
 
-  getDefaultValue(type: EFormInputType, value: any): any {
-    switch (type) {
-      case EFormInputType.INPUT_TYPE_CHECKBOX:
-        return value == null || typeof value !== 'boolean' ? false : value;
-      default:
-        return value == null ? false : value;
-    }
-  }
-
   isValidArray(arrayIn: any[]): boolean {
     return arrayIn && Array.isArray(arrayIn) && arrayIn.length > 0;
   }
@@ -46,7 +37,7 @@ export class FormInputDataBuilder implements IFormInputData {
   }
 
   addValue(value: any): FormInputDataBuilder {
-    this.value = this.getDefaultValue(this.type, value);
+    this.value = this.getDefaultFormInputValue(this.type, value);
     return this;
   }
 
@@ -105,14 +96,7 @@ export class FormInputDataBuilder implements IFormInputData {
   }
 
   private getDefaultFormInputValue = (inputType: EFormInputType, currentValue: any): string | boolean => {
-    /*
-      let value == null
-      [*] return true if model.value === null || model.value === undefined
-  */
-    if (
-      inputType === EFormInputType.INPUT_TYPE_CHECKBOX &&
-      (currentValue == null || currentValue !== false || currentValue !== true)
-    ) {
+    if (inputType === EFormInputType.INPUT_TYPE_CHECKBOX && typeof currentValue !== 'boolean') {
       return false;
     }
     return currentValue || '';
