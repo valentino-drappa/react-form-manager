@@ -65,11 +65,11 @@ export class FormInputDataBuilder implements IFormInputData {
     return this;
   }
 
-  addAvailableValue(value: any, label: any): FormInputDataBuilder {
+  addAvailableValue({ value, label }: IFormInputAvailableValue): FormInputDataBuilder {
     return this.addAvailableValueList([{ value, label }]);
   }
 
-  addAvailableValueList(valueList: [any]): FormInputDataBuilder {
+  addAvailableValueList(valueList: [IFormInputAvailableValue]): FormInputDataBuilder {
     if (!this.isValidArray(valueList)) {
       return this;
     }

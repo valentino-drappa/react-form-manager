@@ -1,4 +1,4 @@
 export interface IFormInputAvailableValue {
-  codeId: string,
-  codeValue: string
+  value: string;
+  label: string;
 }
