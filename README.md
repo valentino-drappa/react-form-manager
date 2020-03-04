@@ -71,3 +71,8 @@ emitLastFieldUpdated
 | updateInputs         | addInputs({[inputName]: [inputProperties]}) | void         | update input(s)                                                    |
 | removeInputs         | removeInputs([inputName])                   | void         | remove input(s)                                                    |
 | emitLastFieldUpdated | emitLastFieldUpdated(true\|false)           | void         | true: lastFieldUpdate return a value <br /> false: lastFieldUpdate |
+
+# GitHub examples
+
+Contains examples to manage a form using the library
+https://github.com/valentino-drappa/vdr-react-form-manager-sandbox
