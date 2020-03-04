@@ -5,6 +5,7 @@ import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
 import { FormInputData } from './FormInputData';
+import { IFormInputProperty } from '../interface/forminput/FormInputProperty.interface';
 
 export class FormInputDataBuilder implements IFormInputData {
   id?: string;
@@ -53,7 +54,7 @@ export class FormInputDataBuilder implements IFormInputData {
     return this;
   }
 
-  addValidators(validators: [IFormInputValidator]): FormInputDataBuilder {
+  addValidators(validators: IFormInputValidator[]): FormInputDataBuilder {
     if (
       this.isValidArray(validators) &&
       (this.type === EFormInputType.INPUT_TYPE_TEXT ||
@@ -69,7 +70,7 @@ export class FormInputDataBuilder implements IFormInputData {
     return this.addAvailableValueList([{ value, label }]);
   }
 
-  addAvailableValueList(valueList: [IFormInputAvailableValue]): FormInputDataBuilder {
+  addAvailableValueList(valueList: IFormInputAvailableValue[]): FormInputDataBuilder {
     if (!this.isValidArray(valueList)) {
       return this;
     }
@@ -85,8 +86,8 @@ export class FormInputDataBuilder implements IFormInputData {
     return this;
   }
 
-  addProperty(propertyName: any, propertyValue: any) {
-    this.properties = { ...this.properties, [propertyName]: propertyValue };
+  addProperty({ name, value }: IFormInputProperty) {
+    this.properties = { ...this.properties, [name]: value };
     return this;
   }
 
