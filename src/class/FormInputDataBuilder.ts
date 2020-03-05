@@ -10,7 +10,7 @@ import { validateFormInput } from '../utils/formInputsValidator.utils';
 export class FormInputDataBuilder implements IFormInputData {
   id?: string;
   name: string;
-  value: any;
+  value: any = '';
   label: string = '';
   isValid: boolean = true;
   errors: string[] = [];
