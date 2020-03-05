@@ -8,6 +8,10 @@ you can:
 - Manage cross form inputs validation
 - add/remove/update inputs
 
+# Show it in action
+
+Visit [vdr-react-form-manager-sandbox](https://vdr-react-form-manager-sandbox.herokuapp.com/basic/text) website to see several examples of how to use the library.
+
 # Installation
 
 - npm
