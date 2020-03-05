@@ -25,6 +25,7 @@ export const handleInputChange = ({ name, value, emitLastFieldUpdatedStatus }: a
   const formInputDataUpdated = {
     ...currentFormInputData,
     value,
+    isValid: errors.length === 0,
     errors,
   };
   const _formInputs = { ...formInputs, [name]: { ...formInputDataUpdated } };
@@ -60,7 +61,7 @@ export const resetState = ({
     formProperties: {
       formValidators: _formValidators,
       isFormDisabled: false,
-      isFormValid,
+      isFormValid: typeof isFormValid === 'boolean' ? isFormValid : true,
       formErrors: [],
       formCustomProperties,
     },

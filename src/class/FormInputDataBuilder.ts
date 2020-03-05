@@ -5,12 +5,14 @@ import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvaila
 import { FormInputData } from './FormInputData';
 import { ICustomProperty } from '..';
 import { isValidArray } from '../utils/array.utils';
+import { validateFormInput } from '../utils/formInputsValidator.utils';
 
 export class FormInputDataBuilder implements IFormInputData {
   id?: string;
   name: string;
   value: any;
   label: string = '';
+  isValid: boolean = true;
   errors: string[] = [];
   disabled: boolean = false;
   classNames: string[] = [];
@@ -84,6 +86,7 @@ export class FormInputDataBuilder implements IFormInputData {
 
   build(): IStateInputs {
     const formInputData = new FormInputData(this);
+    this.isValid = validateFormInput(this.value, this.validators).length === 0;
     return { [this.name]: formInputData } as IStateInputs;
   }
 }

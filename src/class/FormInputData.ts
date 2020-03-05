@@ -9,6 +9,7 @@ export class FormInputData implements IFormInputData {
   name: string;
   value: any;
   label: string;
+  isValid: boolean;
   errors: string[];
   disabled: boolean;
   classNames: string[];
@@ -21,6 +22,7 @@ export class FormInputData implements IFormInputData {
     this.name = build.name;
     this.value = build.value;
     this.label = build.label;
+    this.isValid = build.isValid;
     this.errors = [];
     this.disabled = build.disabled;
     this.classNames = build.classNames;

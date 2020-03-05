@@ -7,6 +7,7 @@ export interface IFormInputData {
   name: string;
   value: any;
   label: string;
+  isValid: boolean;
   errors: string[];
   disabled: boolean;
   classNames: string[];
