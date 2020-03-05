@@ -1,11 +1,11 @@
-import { IFormStateInputs } from "./FormStateInptus.interface";
-import { IFormValidator } from "./FormValidatior.interface";
+import { IFormStateInputs } from './FormStateInptus.interface';
+import { IFormValidator } from './FormValidatior.interface';
 
 export interface IFormState {
-  formInputs: IFormStateInputs
-  formValidators: IFormValidator[]
-  isFormDisabled: boolean,
-  isFormValid: boolean,
-  formErrors: string[],
-  lastFieldUpdated?: string,
+  formInputs: IFormStateInputs;
+  formValidators: IFormValidator[];
+  isFormDisabled: boolean;
+  isFormValid: boolean;
+  formErrors: string[];
+  lastFieldUpdated: { inputName: string | null };
 }

@@ -40,7 +40,7 @@ export const addInputs = (formInputsToAdd: IFormStateInputs, currentState: IForm
 
   /* keep order to not overwritte existing inputs */
   const newFormInputs = { ...formInputsToAdd, ...formInputs };
-  return generateFormState(newFormInputs, formValidators, isFormDisabled);
+  return generateFormState(newFormInputs, formValidators, isFormDisabled, null);
 };
 
 export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentState: IFormState): IFormState => {
@@ -68,15 +68,15 @@ export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentStat
 
   /* keep order to not overwritte updated inputs */
   const newFormInputs = { ...formInputs, ...updatedFormInputs };
-  return generateFormState(newFormInputs, formValidators, isFormDisabled);
+  return generateFormState(newFormInputs, formValidators, isFormDisabled, null);
 };
 
 export const removeInputs = (formNameList: string[], currentState: IFormState): IFormState => {
   if (!formNameList || !formNameList.length) {
     return currentState;
   }
-  const { formInputs, formValidators, isFormDisabled } = currentState;
+  const { formInputs, formValidators, isFormDisabled, lastFieldUpdated } = currentState;
 
   formNameList.forEach(formInputName => delete formInputs[formInputName]);
-  return generateFormState({ ...formInputs }, formValidators, isFormDisabled);
+  return generateFormState({ ...formInputs }, formValidators, isFormDisabled, null);
 };

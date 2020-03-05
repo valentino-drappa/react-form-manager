@@ -18,7 +18,7 @@ export const generateFormState = (
   formInputs: IFormStateInputs,
   formValidators: IFormValidator[],
   isFormDisabled: boolean,
-  lastFieldUpdated?: string,
+  updatedInputName: string | null,
 ): IFormState => {
   const formErrors = validateForm(formInputs, formValidators);
   return {
@@ -27,7 +27,7 @@ export const generateFormState = (
     formErrors,
     isFormDisabled,
     isFormValid: !isInvalidForm(formInputs, formErrors),
-    lastFieldUpdated,
+    lastFieldUpdated: { inputName: updatedInputName },
   };
 };
 

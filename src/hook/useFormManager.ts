@@ -7,10 +7,11 @@ import { FormReducer } from '../reducer/form.reducer';
 import { EFormActionType } from '../enum/FormActionType.enum';
 import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
+const emptyLastFieldUpdated = { inputName: null };
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   function init({ formInputs, formValidators }: IFormInitalState): IFormState {
-    return generateFormState(formInputs, formValidators, false);
+    return generateFormState(formInputs, formValidators, false, null);
   }
 
   const formInitalValues = useRef(formInitialStateValues);
@@ -41,7 +42,14 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   function resetForm() {
     const { formInputs, formValidators } = { ...formInitalValues.current };
     emitLastFieldUpdated.current = true;
-    dispatch({ type: EFormActionType.RESET, payload: generateFormState(formInputs, formValidators, false) });
+    dispatch({
+      type: EFormActionType.RESET,
+      payload: generateFormState(formInputs, formValidators, false, state.lastFieldUpdated.inputName),
+    });
+  }
+
+  function getLastFieldUpdate() {
+    return emitLastFieldUpdated.current ? state.lastFieldUpdated : emptyLastFieldUpdated;
   }
 
   return {
@@ -61,6 +69,6 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     formErrors: state.formErrors,
     emitLastFieldUpdated: (isLastFieldUpdatedToEmit: boolean) =>
       (emitLastFieldUpdated.current = isLastFieldUpdatedToEmit),
-    lastFieldUpdated: emitLastFieldUpdated.current ? state.lastFieldUpdated : null,
+    lastFieldUpdated: getLastFieldUpdate(),
   };
 };
