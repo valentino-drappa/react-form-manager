@@ -1,6 +1,6 @@
 import { IFormInputValidator } from '../FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../FormInputAvailableValue.interface';
-import { IFormInputProperty } from '../FormInputProperty.interface';
+import { ICustomProperty } from '../../..';
 
 export interface IFormInputMutationData {
   value?: any;
@@ -9,5 +9,5 @@ export interface IFormInputMutationData {
   classNames?: string[];
   validators?: IFormInputValidator[];
   availableValues?: IFormInputAvailableValue[];
-  properties?: IFormInputProperty[];
+  customProperties?: ICustomProperty;
 }

@@ -1,34 +1,36 @@
 import { useReducer, useRef } from 'react';
 import { IFormInputData } from '../interface/forminput/FormInputData.interface';
 import { IFormInitalState } from '../interface/form/FormInitalState.interface';
-import { IFormState } from '../interface/form/FormState.interface';
-import { generateFormState } from '../utils/form.utils';
+import { IState } from '../interface/form/State.interface';
 import { FormReducer } from '../reducer/form.reducer';
 import { EFormActionType } from '../enum/FormActionType.enum';
-import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
+import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
-const emptyLastFieldUpdated = { inputName: null };
+import { resetState } from '../utils/form.utils';
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
-  function init({ formInputs, formValidators }: IFormInitalState): IFormState {
-    return generateFormState(formInputs, formValidators, false, null);
+  function init(formInitalState: IFormInitalState): IState {
+    return resetState(formInitalState);
   }
 
   const formInitalValues = useRef(formInitialStateValues);
-  const emitLastFieldUpdated = useRef(true);
+  const emitLastFieldUpdatedStatus = useRef(true);
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
-  function _getInput(inputName: string): IFormInputData {
+  function getInput(inputName: string): IFormInputData {
     /* send a copy to prevent to change input properties  */
     return { ...state.formInputs[inputName] };
   }
 
-  function _handleFormChange(e: any) {
-    const { name, value } = e.target; // <-- moved outside asynchronous context
-    dispatch({ type: EFormActionType.INPUT_CHANGE, payload: { name, value } });
+  function handleFormChange(e: any) {
+    const { name, value, type, tagName } = e.target; // <-- moved outside asynchronous context
+    dispatch({
+      type: EFormActionType.INPUT_CHANGE,
+      payload: { name, value, type, tagName, emitLastFieldUpdatedStatus: emitLastFieldUpdatedStatus.current },
+    });
   }
 
-  function _getFormValues() {
+  function getFormValues() {
     const { formInputs } = state;
     return Object.keys(formInputs).reduce(
       (object, inputKey) => ({
@@ -40,35 +42,66 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   }
 
   function resetForm() {
-    const { formInputs, formValidators } = { ...formInitalValues.current };
-    emitLastFieldUpdated.current = true;
+    emitLastFieldUpdatedStatus.current = true;
     dispatch({
       type: EFormActionType.RESET,
-      payload: generateFormState(formInputs, formValidators, false, state.lastFieldUpdated.inputName),
+      payload: formInitalValues.current,
     });
   }
 
-  function getLastFieldUpdate() {
-    return emitLastFieldUpdated.current ? state.lastFieldUpdated : emptyLastFieldUpdated;
+  function setFormDisabled(formDisabled: boolean) {
+    if (typeof formDisabled !== 'boolean' || formDisabled === state.formProperties.isFormDisabled) {
+      return;
+    }
+    dispatch({ type: EFormActionType.DISABLE_FORM, payload: formDisabled });
   }
 
+  function addInputs(formInputs: IStateInputs) {
+    if (!formInputs || !Object.keys(formInputs).length) {
+      return;
+    }
+    dispatch({ type: EFormActionType.ADD_INPUTS, payload: formInputs });
+  }
+
+  function updateInputs(formInputMutation: IFormInputMutation) {
+    if (!formInputMutation || !Object.keys(formInputMutation).length) {
+      return;
+    }
+    dispatch({ type: EFormActionType.UPDATE_INPUTS, payload: formInputMutation });
+  }
+
+  function removeInputs(inputNameList: string[]) {
+    if (!inputNameList || !inputNameList.length) {
+      return;
+    }
+    dispatch({ type: EFormActionType.REMOVE_INPUTS, payload: inputNameList });
+  }
+
+  // inputNameList: null -> validate all inputs
+  function validateInputs(inputNameList?: string[]) {
+    dispatch({ type: EFormActionType.VALIDATE_INPUTS, payload: inputNameList });
+  }
+
+  function throwLastFieldUpdated(throwField: boolean) {
+    emitLastFieldUpdatedStatus.current = throwField;
+  }
+
+  const { lastFieldUpdated } = state;
+  const { formErrors, isFormDisabled, isFormValid } = state.formProperties;
   return {
+    handleFormChange,
+    getFormValues,
+    getInput,
+    setFormDisabled,
+    addInputs,
+    updateInputs,
+    removeInputs,
+    validateInputs,
     resetForm,
-    handleFormChange: (e: any) => _handleFormChange(e),
-    getFormValues: () => _getFormValues(),
-    getInput: (inputName: string) => _getInput(inputName),
-    setFormDisabled: (isFormDisabled: boolean) =>
-      dispatch({ type: EFormActionType.DISABLE_FORM, payload: isFormDisabled }),
-    addInputs: (formInputs: IFormStateInputs) => dispatch({ type: EFormActionType.ADD_INPUTS, payload: formInputs }),
-    updateInputs: (formInputMutation: IFormInputMutation) =>
-      dispatch({ type: EFormActionType.UPDATE_INPUTS, payload: formInputMutation }),
-    removeInputs: (formInputNameList: string[]) =>
-      dispatch({ type: EFormActionType.REMOVE_INPUTS, payload: formInputNameList }),
-    isFormDisabled: state.isFormDisabled,
-    isFormValid: state.isFormValid,
-    formErrors: state.formErrors,
-    emitLastFieldUpdated: (isLastFieldUpdatedToEmit: boolean) =>
-      (emitLastFieldUpdated.current = isLastFieldUpdatedToEmit),
-    lastFieldUpdated: getLastFieldUpdate(),
+    throwLastFieldUpdated,
+    lastFieldUpdated,
+    isFormDisabled,
+    isFormValid,
+    formErrors,
   };
 };

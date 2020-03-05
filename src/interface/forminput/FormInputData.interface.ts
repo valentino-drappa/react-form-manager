@@ -1,11 +1,9 @@
-import { EFormInputType } from '../../enum/FormInputType.enum';
 import { IFormInputValidator } from './FormInputValidator.interface';
 import { IFormInputAvailableValue } from './FormInputAvailableValue.interface';
-import { IFormInputProperty } from './FormInputProperty.interface';
+import { ICustomProperty } from '../common/CustomProperty.interface';
 
 export interface IFormInputData {
   id?: string;
-  type: EFormInputType;
   name: string;
   value: any;
   label: string;
@@ -14,6 +12,5 @@ export interface IFormInputData {
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  properties: IFormInputProperty[];
-  isValid: boolean;
+  customProperties: ICustomProperty;
 }

@@ -1,6 +1,9 @@
 import { IFormValidator } from './FormValidatior.interface';
-import { IFormStateInputs } from './FormStateInptus.interface';
+import { IStateInputs } from './StateInptus.interface';
+import { ICustomProperty } from '../..';
 export interface IFormInitalState {
-  formInputs: IFormStateInputs,
-  formValidators: IFormValidator[],
+  formInputs: IStateInputs;
+  formValidators?: IFormValidator[];
+  isFormValid?: boolean;
+  formCustomProperties?: ICustomProperty;
 }

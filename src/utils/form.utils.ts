@@ -1,58 +1,69 @@
-import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
-import { IFormState } from '../interface/form/FormState.interface';
+import { IStateInputs } from '../interface/form/StateInptus.interface';
+import { IState } from '../interface/form/State.interface';
 import { validateFormInput } from './formInputsValidator.utils';
-import { EFormInputType } from '../enum/FormInputType.enum';
 import { IFormInputData } from '../interface/forminput/FormInputData.interface';
 import { validateForm } from './formValidator.utils';
 import { IFormValidator } from '../interface/form/FormValidatior.interface';
+import { IFormInitalState } from '..';
+import { isValidArray } from './array.utils';
 
-const isFormWithValidInputs = (formInputs: IFormStateInputs): boolean => {
-  return !Object.keys(formInputs).some(x => !formInputs[x].isValid);
+export const getFormValidity = (formInputs: IStateInputs, formValidators: IFormValidator[]) => {
+  const hasInvalidInputs = Object.keys(formInputs).some(x => !formInputs[x].errors.length);
+  const formErrors = hasInvalidInputs ? [] : validateForm(formInputs, formValidators);
+  return { formErrors, isFormValid: !hasInvalidInputs && !formErrors.length };
 };
 
-export const isInvalidForm = (formInputs: IFormStateInputs, formErrors: string[]): boolean => {
-  return !isFormWithValidInputs(formInputs) || formErrors.length > 0;
-};
-
-export const generateFormState = (
-  formInputs: IFormStateInputs,
-  formValidators: IFormValidator[],
-  isFormDisabled: boolean,
-  updatedInputName: string | null,
-): IFormState => {
-  const formErrors = validateForm(formInputs, formValidators);
-  return {
-    formInputs,
-    formValidators,
-    formErrors,
-    isFormDisabled,
-    isFormValid: !isInvalidForm(formInputs, formErrors),
-    lastFieldUpdated: { inputName: updatedInputName },
-  };
-};
-
-export const handleInputChange = ({ name, value }: any, state: IFormState): IFormState => {
-  const { formInputs, formValidators } = state;
+export const handleInputChange = ({ name, value, emitLastFieldUpdatedStatus }: any, currentState: IState): IState => {
+  const { formInputs } = currentState;
   const formInputData = formInputs[name];
   if (!formInputData) {
-    return state;
+    return currentState;
   }
 
   const currentFormInputData: IFormInputData = formInputs[name];
   const errors = validateFormInput(value, currentFormInputData.validators);
   const formInputDataUpdated = {
     ...currentFormInputData,
-    value: currentFormInputData.type === EFormInputType.INPUT_TYPE_CHECKBOX ? !currentFormInputData.value : value,
+    value,
     errors,
-    isValid: errors.length === 0,
   };
   const _formInputs = { ...formInputs, [name]: { ...formInputDataUpdated } };
-  return generateFormState(_formInputs, formValidators, state.isFormDisabled, name);
+  const { formProperties } = currentState;
+
+  return {
+    formInputs: _formInputs,
+    formProperties: {
+      ...formProperties,
+      ...getFormValidity(_formInputs, formProperties.formValidators),
+    },
+    lastFieldUpdated: emitLastFieldUpdatedStatus ? { inputName: name } : null,
+  } as IState;
 };
 
-export const setFormDisabled = (isFormDisabled: boolean, state: IFormState): IFormState => {
-  if (isFormDisabled === state.isFormDisabled) {
-    return state;
+export const setFormDisabled = (isFormDisabled: boolean, state: IState): IState => {
+  return { ...state, formProperties: { ...state.formProperties, isFormDisabled } };
+};
+
+export const resetState = ({
+  formInputs,
+  formValidators,
+  isFormValid,
+  formCustomProperties,
+}: IFormInitalState): IState => {
+  let _formValidators = [] as IFormValidator[];
+  if (formValidators && isValidArray(formValidators)) {
+    _formValidators = formValidators.filter((x: IFormValidator) => typeof x.validateForm === 'function');
   }
-  return { ...state, isFormDisabled };
+
+  return {
+    formInputs,
+    formProperties: {
+      formValidators: _formValidators,
+      isFormDisabled: false,
+      isFormValid,
+      formErrors: [],
+      formCustomProperties,
+    },
+    lastFieldUpdated: null,
+  } as IState;
 };
