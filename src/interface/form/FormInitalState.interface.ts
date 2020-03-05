@@ -4,6 +4,5 @@ import { ICustomProperty } from '../..';
 export interface IFormInitalState {
   formInputs: IStateInputs;
   formValidators?: IFormValidator[];
-  isFormValid?: boolean;
   formCustomProperties?: ICustomProperty;
 }

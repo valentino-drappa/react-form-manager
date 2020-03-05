@@ -86,7 +86,7 @@ export class FormInputDataBuilder implements IFormInputData {
 
   build(): IStateInputs {
     const formInputData = new FormInputData(this);
-    this.isValid = validateFormInput(this.value, this.validators).length === 0;
+    formInputData.isValid = validateFormInput(this.value, this.validators).length === 0;
     return { [this.name]: formInputData } as IStateInputs;
   }
 }

@@ -8,7 +8,7 @@ import { IFormInitalState } from '..';
 import { isValidArray } from './array.utils';
 
 export const getFormValidity = (formInputs: IStateInputs, formValidators: IFormValidator[]) => {
-  const hasInvalidInputs = Object.keys(formInputs).some(x => !formInputs[x].errors.length);
+  const hasInvalidInputs = Object.keys(formInputs).some(x => !formInputs[x].isValid);
   const formErrors = hasInvalidInputs ? [] : validateForm(formInputs, formValidators);
   return { formErrors, isFormValid: !hasInvalidInputs && !formErrors.length };
 };
@@ -45,23 +45,19 @@ export const setFormDisabled = (isFormDisabled: boolean, state: IState): IState 
   return { ...state, formProperties: { ...state.formProperties, isFormDisabled } };
 };
 
-export const resetState = ({
-  formInputs,
-  formValidators,
-  isFormValid,
-  formCustomProperties,
-}: IFormInitalState): IState => {
+export const resetState = ({ formInputs, formValidators, formCustomProperties }: IFormInitalState): IState => {
   let _formValidators = [] as IFormValidator[];
   if (formValidators && isValidArray(formValidators)) {
     _formValidators = formValidators.filter((x: IFormValidator) => typeof x.validateForm === 'function');
   }
+  const { isFormValid } = getFormValidity(formInputs, _formValidators);
 
   return {
     formInputs,
     formProperties: {
       formValidators: _formValidators,
       isFormDisabled: false,
-      isFormValid: typeof isFormValid === 'boolean' ? isFormValid : true,
+      isFormValid,
       formErrors: [],
       formCustomProperties,
     },
