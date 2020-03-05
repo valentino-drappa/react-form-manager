@@ -1,6 +1,6 @@
 # vdr-react-form-manager
 
-With vdr-react-form-manager is a form manager for React. With vdr-react-form-manager
+vdr-react-form-manager is a form manager for React. With vdr-react-form-manager
 you can:
 
 - Manage forms

@@ -18,7 +18,8 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
   function _getInput(inputName: string): IFormInputData {
-    return state.formInputs[inputName];
+    /* send a copy to prevent to change input properties  */
+    return { ...state.formInputs[inputName] };
   }
 
   function _handleFormChange(e: any) {
@@ -38,7 +39,9 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   }
 
   function resetForm() {
-    init(formInitalValues.current);
+    const { formInputs, formValidators } = { ...formInitalValues.current };
+    emitLastFieldUpdated.current = true;
+    dispatch({ type: EFormActionType.RESET, payload: generateFormState(formInputs, formValidators, false) });
   }
 
   return {
