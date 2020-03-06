@@ -1,6 +1,6 @@
-import { EFormActionType } from "../../enum/FormActionType.enum";
+import { EFormActionType } from '../../enum/FormActionType.enum';
 
 export interface IFormAction {
-  type: EFormActionType,
-  payload: any,
+  type: EFormActionType;
+  payload: any;
 }
