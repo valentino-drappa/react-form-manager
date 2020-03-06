@@ -4,5 +4,7 @@ export enum EFormActionType {
   ADD_INPUTS,
   UPDATE_INPUTS,
   REMOVE_INPUTS,
+  VALIDATE_INPUTS,
   RESET,
+  UPDATE_FORM_PROPS,
 }

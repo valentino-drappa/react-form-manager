@@ -1,39 +1,39 @@
-import { IFormInputData } from '../interface/forminput/FormInputData.interface';
-import { EFormInputType } from '../enum/FormInputType.enum';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInputDataBuilder } from './FormInputDataBuilder';
+import { FormInputBuilder } from './FormInputBuilder';
+import { ICustomProperty } from '../interface/common/CustomProperty.interface';
 
-export class FormInputData implements IFormInputData {
+export class FormInput implements IFormInputProperties {
   id?: string;
-  type: EFormInputType;
   name: string;
   value: any;
   label: string;
+  isValid: boolean;
   errors: string[];
   disabled: boolean;
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  properties: any;
-  isValid: boolean;
+  customProperties: ICustomProperty;
+  originalDisabledValue: boolean;
 
-  constructor(build: IFormInputData) {
+  constructor(build: IFormInputProperties) {
     this.id = build.id;
-    this.type = build.type;
     this.name = build.name;
     this.value = build.value;
     this.label = build.label;
+    this.isValid = build.isValid;
     this.errors = [];
     this.disabled = build.disabled;
     this.classNames = build.classNames;
     this.validators = build.validators;
     this.availableValues = build.availableValues;
-    this.properties = build.properties;
-    this.isValid = build.isValid;
+    this.customProperties = build.customProperties;
+    this.originalDisabledValue = build.disabled;
   }
 
-  static Builder(type: EFormInputType, name: string) {
-    return new FormInputDataBuilder(type, name);
+  static Builder(name: string) {
+    return new FormInputBuilder(name);
   }
 }

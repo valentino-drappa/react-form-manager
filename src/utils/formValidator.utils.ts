@@ -1,7 +1,7 @@
 import { IFormValidator } from '../interface/form/FormValidatior.interface';
-import { IFormStateInputs } from '../interface/form/FormStateInptus.interface';
+import { IStateInputs } from '../interface/form/StateInptus.interface';
 
-export const validateForm = (formInputsData: IFormStateInputs, formValidators: IFormValidator[]): string[] => {
+export const validateForm = (formInputsData: IStateInputs, formValidators: IFormValidator[]): string[] => {
   const errors: string[] = [];
   if (!formValidators || !formValidators.length) {
     return errors;

@@ -1,4 +1,4 @@
-import { IFormStateInputs } from './FormStateInptus.interface';
+import { IStateInputs } from './StateInptus.interface';
 export interface IFormValidator {
-  validateForm(formInputs: IFormStateInputs): string | null,
-};
+  validateForm(formInputs: IStateInputs): string | null;
+}
