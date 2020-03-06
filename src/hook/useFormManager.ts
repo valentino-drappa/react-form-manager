@@ -82,8 +82,8 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     dispatch({ type: EFormActionType.VALIDATE_INPUTS, payload: inputNameList });
   }
 
-  function throwLastFieldUpdated(throwField: boolean) {
-    emitLastFieldUpdatedStatus.current = throwField;
+  function emitLastFieldUpdated(isEmissionEnabled: boolean) {
+    emitLastFieldUpdatedStatus.current = isEmissionEnabled;
   }
 
   const { lastFieldUpdated } = state;
@@ -98,7 +98,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     removeInputs,
     validateInputs,
     resetForm,
-    throwLastFieldUpdated,
+    emitLastFieldUpdated,
     lastFieldUpdated,
     isFormDisabled,
     isFormValid,
