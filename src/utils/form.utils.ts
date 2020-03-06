@@ -97,10 +97,6 @@ export const handleInputChange = (
   } as IState;
 };
 
-export const setFormDisabled = (isFormDisabled: boolean, state: IState): IState => {
-  return { ...state, formProperties: { ...state.formProperties, isFormDisabled } };
-};
-
 export const resetState = ({ formInputs, formValidators, formCustomProperties }: IFormInitalState): IState => {
   const authorizedFormValidators = getAuthorizedFormValidators(formValidators || []);
 

@@ -1,13 +1,11 @@
 import { IFormAction } from '../interface/form/FormAction.interface';
 import { IState } from '../interface/form/State.interface';
 import { EFormActionType } from '../enum/FormActionType.enum';
-import { handleInputChange, setFormDisabled, resetState, updateFormProperties } from '../utils/form.utils';
+import { handleInputChange, resetState, updateFormProperties } from '../utils/form.utils';
 import { addInputs, removeInputs, updateInputs, validateInputs } from '../utils/formInputs.utils';
 
 export const FormReducer = (state: IState, action: IFormAction): IState => {
   switch (action.type) {
-    case EFormActionType.DISABLE_FORM:
-      return setFormDisabled(action.payload, state);
     case EFormActionType.INPUT_CHANGE:
       return handleInputChange(action.payload, state);
     case EFormActionType.ADD_INPUTS:

@@ -50,13 +50,6 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     });
   }
 
-  function setFormDisabled(formDisabled: boolean) {
-    if (typeof formDisabled !== 'boolean' || formDisabled === state.formProperties.isFormDisabled) {
-      return;
-    }
-    dispatch({ type: EFormActionType.DISABLE_FORM, payload: formDisabled });
-  }
-
   function addInputs(formInputs: IStateInputs) {
     if (!formInputs || !Object.keys(formInputs).length) {
       return;
@@ -97,7 +90,6 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     handleFormChange,
     getFormValues,
     getInput,
-    setFormDisabled,
     addInputs,
     updateInputs,
     removeInputs,
