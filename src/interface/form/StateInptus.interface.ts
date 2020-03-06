@@ -1,5 +1,5 @@
-import { IFormInputData } from '../forminput/FormInputData.interface';
+import { IFormInputProperties } from '../forminput/FormInputProperties.interface';
 
 export interface IStateInputs {
-  [key: string]: IFormInputData;
+  [name: string]: IFormInputProperties;
 }

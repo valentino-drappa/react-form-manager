@@ -1,5 +1,5 @@
 import { useReducer, useRef } from 'react';
-import { IFormInputData } from '../interface/forminput/FormInputData.interface';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { IFormInitalState } from '../interface/form/FormInitalState.interface';
 import { IState } from '../interface/form/State.interface';
 import { FormReducer } from '../reducer/form.reducer';
@@ -7,6 +7,7 @@ import { EFormActionType } from '../enum/FormActionType.enum';
 import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { resetState } from '../utils/form.utils';
+import { IFormPropertiesMutation } from '..';
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   function init(formInitalState: IFormInitalState): IState {
@@ -17,16 +18,16 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   const emitLastFieldUpdatedStatus = useRef(true);
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
-  function getInput(inputName: string): IFormInputData {
+  function getInput(inputName: string): IFormInputProperties {
     /* send a copy to prevent to change input properties  */
     return { ...state.formInputs[inputName] };
   }
 
   function handleFormChange(e: any) {
-    const { name, value, type, tagName } = e.target; // <-- moved outside asynchronous context
+    const { name, value, type, tagName, checked } = e.target; // <-- moved outside asynchronous context
     dispatch({
       type: EFormActionType.INPUT_CHANGE,
-      payload: { name, value, type, tagName, emitLastFieldUpdatedStatus: emitLastFieldUpdatedStatus.current },
+      payload: { name, value, type, tagName, checked, emitLastFieldUpdatedStatus: emitLastFieldUpdatedStatus.current },
     });
   }
 
@@ -86,6 +87,10 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     emitLastFieldUpdatedStatus.current = isEmissionEnabled;
   }
 
+  function updateFormProps(formProperties: IFormPropertiesMutation) {
+    dispatch({ type: EFormActionType.UPDATE_FORM_PROPS, payload: formProperties });
+  }
+
   const { lastFieldUpdated } = state;
   const { formErrors, isFormDisabled, isFormValid } = state.formProperties;
   return {
@@ -98,6 +103,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     removeInputs,
     validateInputs,
     resetForm,
+    updateFormProps,
     emitLastFieldUpdated,
     lastFieldUpdated,
     isFormDisabled,

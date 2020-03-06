@@ -1,13 +1,12 @@
-import { IFormInputData } from '../interface/forminput/FormInputData.interface';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
-import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInputData } from './FormInputData';
-import { ICustomProperty } from '..';
+import { FormInput } from './FormInput';
+import { ICustomProperty, IStateInputs } from '..';
 import { isValidArray } from '../utils/array.utils';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 
-export class FormInputDataBuilder implements IFormInputData {
+export class FormInputBuilder implements IFormInputProperties {
   id?: string;
   name: string;
   value: any = '';
@@ -19,46 +18,47 @@ export class FormInputDataBuilder implements IFormInputData {
   validators: IFormInputValidator[] = [];
   availableValues: IFormInputAvailableValue[] = [];
   customProperties: ICustomProperty;
+  originalDisabledValue: boolean = false;
 
   constructor(name: string) {
     this.name = name;
     this.customProperties = {};
   }
 
-  addId(id: string): FormInputDataBuilder {
+  addId(id: string): FormInputBuilder {
     this.id = id;
     return this;
   }
 
-  addValue(value: any): FormInputDataBuilder {
+  addValue(value: any): FormInputBuilder {
     this.value = value;
     return this;
   }
 
-  addDisabled(disabled: boolean): FormInputDataBuilder {
+  addDisabled(disabled: boolean): FormInputBuilder {
     this.disabled = disabled == null ? false : disabled;
     return this;
   }
 
-  addClassNames(classNames: string[]): FormInputDataBuilder {
+  addClassNames(classNames: string[]): FormInputBuilder {
     if (isValidArray(classNames)) {
       this.classNames = classNames;
     }
     return this;
   }
 
-  addValidators(validators: IFormInputValidator[]): FormInputDataBuilder {
+  addValidators(validators: IFormInputValidator[]): FormInputBuilder {
     if (isValidArray(validators)) {
       this.validators = validators.filter((x: IFormInputValidator) => typeof x.validate === 'function');
     }
     return this;
   }
 
-  addAvailableValue({ value, label }: IFormInputAvailableValue): FormInputDataBuilder {
+  addAvailableValue({ value, label }: IFormInputAvailableValue): FormInputBuilder {
     return this.addAvailableValueList([{ value, label }]);
   }
 
-  addAvailableValueList(valueList: IFormInputAvailableValue[]): FormInputDataBuilder {
+  addAvailableValueList(valueList: IFormInputAvailableValue[]): FormInputBuilder {
     if (!isValidArray(valueList)) {
       return this;
     }
@@ -69,7 +69,7 @@ export class FormInputDataBuilder implements IFormInputData {
     return this;
   }
 
-  addLabel(label: any): FormInputDataBuilder {
+  addLabel(label: any): FormInputBuilder {
     this.label = label;
     return this;
   }
@@ -79,14 +79,14 @@ export class FormInputDataBuilder implements IFormInputData {
     return this;
   }
 
-  removeProperty(propertyName: any): FormInputDataBuilder {
+  removeProperty(propertyName: any): FormInputBuilder {
     delete this.customProperties[propertyName];
     return this;
   }
 
   build(): IStateInputs {
-    const formInputData = new FormInputData(this);
-    formInputData.isValid = validateFormInput(this.value, this.validators).length === 0;
-    return { [this.name]: formInputData } as IStateInputs;
+    const formInputProperties = new FormInput(this);
+    formInputProperties.isValid = validateFormInput(this.value, this.validators).length === 0;
+    return { [this.name]: formInputProperties };
   }
 }

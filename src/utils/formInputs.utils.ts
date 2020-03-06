@@ -1,13 +1,12 @@
 import { IStateInputs } from '../interface/form/StateInptus.interface';
-import { IFormInputData } from '../interface/forminput/FormInputData.interface';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { validateFormInput } from './formInputsValidator.utils';
 import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
 import { getFormValidity } from './form.utils';
-import { IFormStateInputs } from '..';
 
-const createIState = (newFormInputs: IFormStateInputs, currentState: IState): IState => {
+const createIState = (newFormInputs: IStateInputs, currentState: IState): IState => {
   const { formProperties } = currentState;
   return {
     formInputs: newFormInputs,
@@ -22,7 +21,7 @@ const createIState = (newFormInputs: IFormStateInputs, currentState: IState): IS
 const isInvalidFormStateInputs = (formStateInputs: IStateInputs | IFormInputMutation) =>
   !formStateInputs || !Object.keys(formStateInputs).length;
 
-const updateFormInputData = (currentFormInput: IFormInputData, updatedFormInput: IFormInputMutationData) => {
+const updateFormInputData = (currentFormInput: IFormInputProperties, updatedFormInput: IFormInputMutationData) => {
   const params = updatedFormInput || {};
   const { value, ...restParameters } = params;
   // need to use hasOwnProperty because we can have the property 'validators' to null/undefined

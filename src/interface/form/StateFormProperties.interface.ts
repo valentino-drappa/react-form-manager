@@ -1,4 +1,4 @@
-import { IFormInputData } from '../forminput/FormInputData.interface';
+import { IFormInputProperties } from '../forminput/FormInputProperties.interface';
 import { IFormValidator } from '../..';
 import { ICustomProperty } from '../common/CustomProperty.interface';
 

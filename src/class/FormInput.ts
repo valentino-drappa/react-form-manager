@@ -1,10 +1,10 @@
-import { IFormInputData } from '../interface/forminput/FormInputData.interface';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInputDataBuilder } from './FormInputDataBuilder';
+import { FormInputBuilder } from './FormInputBuilder';
 import { ICustomProperty } from '../interface/common/CustomProperty.interface';
 
-export class FormInputData implements IFormInputData {
+export class FormInput implements IFormInputProperties {
   id?: string;
   name: string;
   value: any;
@@ -16,8 +16,9 @@ export class FormInputData implements IFormInputData {
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
   customProperties: ICustomProperty;
+  originalDisabledValue: boolean;
 
-  constructor(build: IFormInputData) {
+  constructor(build: IFormInputProperties) {
     this.id = build.id;
     this.name = build.name;
     this.value = build.value;
@@ -29,9 +30,10 @@ export class FormInputData implements IFormInputData {
     this.validators = build.validators;
     this.availableValues = build.availableValues;
     this.customProperties = build.customProperties;
+    this.originalDisabledValue = build.disabled;
   }
 
   static Builder(name: string) {
-    return new FormInputDataBuilder(name);
+    return new FormInputBuilder(name);
   }
 }

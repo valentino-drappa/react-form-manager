@@ -2,7 +2,7 @@ import { IFormInputValidator } from './FormInputValidator.interface';
 import { IFormInputAvailableValue } from './FormInputAvailableValue.interface';
 import { ICustomProperty } from '../common/CustomProperty.interface';
 
-export interface IFormInputData {
+export interface IFormInputProperties {
   id?: string;
   name: string;
   value: any;
@@ -14,4 +14,5 @@ export interface IFormInputData {
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
   customProperties: ICustomProperty;
+  originalDisabledValue: boolean;
 }
