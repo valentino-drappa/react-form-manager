@@ -1,4 +1,4 @@
-import { useReducer, useRef } from 'react';
+import { useReducer, useRef, useCallback } from 'react';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { IFormInitalState } from '../interface/form/FormInitalState.interface';
 import { IState } from '../interface/form/State.interface';
@@ -18,18 +18,18 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   const emitLastFieldUpdatedStatus = useRef(true);
   const [state, dispatch] = useReducer(FormReducer, formInitialStateValues, init);
 
-  function getInput(inputName: string): IFormInputProperties {
+  function getInputProps(inputName: string): IFormInputProperties {
     /* send a copy to prevent to change input properties  */
     return { ...state.formInputs[inputName] };
   }
 
-  function handleFormChange(e: any) {
+  const handleFormChange = useCallback((e: any) => {
     const { name, value, type, tagName, checked } = e.target; // <-- moved outside asynchronous context
     dispatch({
       type: EFormActionType.INPUT_CHANGE,
       payload: { name, value, type, tagName, checked, emitLastFieldUpdatedStatus: emitLastFieldUpdatedStatus.current },
     });
-  }
+  }, []);
 
   function getFormValues() {
     const { formInputs } = state;
@@ -42,54 +42,54 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     );
   }
 
-  function resetForm() {
+  const resetForm = useCallback(() => {
     emitLastFieldUpdatedStatus.current = true;
     dispatch({
       type: EFormActionType.RESET,
       payload: formInitalValues.current,
     });
-  }
+  }, []);
 
-  function addInputs(formInputs: IStateInputs) {
+  const addInputs = useCallback((formInputs: IStateInputs) => {
     if (!formInputs || !Object.keys(formInputs).length) {
       return;
     }
     dispatch({ type: EFormActionType.ADD_INPUTS, payload: formInputs });
-  }
+  }, []);
 
-  function updateInputs(formInputMutation: IFormInputMutation) {
+  const updateInputs = useCallback((formInputMutation: IFormInputMutation) => {
     if (!formInputMutation || !Object.keys(formInputMutation).length) {
       return;
     }
     dispatch({ type: EFormActionType.UPDATE_INPUTS, payload: formInputMutation });
-  }
+  }, []);
 
-  function removeInputs(inputNameList: string[]) {
+  const removeInputs = useCallback((inputNameList: string[]) => {
     if (!inputNameList || !inputNameList.length) {
       return;
     }
     dispatch({ type: EFormActionType.REMOVE_INPUTS, payload: inputNameList });
-  }
+  }, []);
 
   // inputNameList: null -> validate all inputs
-  function validateInputs(inputNameList?: string[]) {
+  const validateInputs = useCallback((inputNameList?: string[]) => {
     dispatch({ type: EFormActionType.VALIDATE_INPUTS, payload: inputNameList });
-  }
+  }, []);
 
-  function emitLastFieldUpdated(isEmissionEnabled: boolean) {
+  const emitLastFieldUpdated = useCallback((isEmissionEnabled: boolean) => {
     emitLastFieldUpdatedStatus.current = isEmissionEnabled;
-  }
+  }, []);
 
-  function updateFormProps(formProperties: IFormPropertiesMutation) {
+  const updateFormProps = useCallback((formProperties: IFormPropertiesMutation) => {
     dispatch({ type: EFormActionType.UPDATE_FORM_PROPS, payload: formProperties });
-  }
+  }, []);
 
   const { lastFieldUpdated } = state;
   const { formErrors, isFormDisabled, isFormValid } = state.formProperties;
   return {
     handleFormChange,
     getFormValues,
-    getInput,
+    getInputProps,
     addInputs,
     updateInputs,
     removeInputs,

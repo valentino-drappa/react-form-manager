@@ -1,5 +1,5 @@
 import { useFormManager } from './hook/useFormManager';
-import { FormInput } from './class/FormInput';
+import { FormInputProperties } from './class/FormInputProperties';
 import { IFormAction } from './interface/form/FormAction.interface';
 import { IFormInitalState } from './interface/form/FormInitalState.interface';
 import { IState } from './interface/form/State.interface';
@@ -15,7 +15,7 @@ import { IFormPropertiesMutation } from './interface/form/mutation/FormPropertie
 
 export {
   useFormManager,
-  FormInput,
+  FormInputProperties as FormInput,
   IFormAction,
   IFormInitalState,
   IState,
