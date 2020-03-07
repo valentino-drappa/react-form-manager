@@ -10,9 +10,9 @@ import { resetState } from '../utils/form.utils';
 import { IFormPropertiesMutation } from '..';
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
-  function init(formInitalState: IFormInitalState): IState {
+  const init = useCallback((formInitalState: IFormInitalState): IState => {
     return resetState(formInitalState);
-  }
+  }, []);
 
   const formInitalValues = useRef(formInitialStateValues);
   const emitLastFieldUpdatedStatus = useRef(true);
