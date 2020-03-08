@@ -15,7 +15,7 @@ import { IFormPropertiesMutation } from './interface/form/mutation/FormPropertie
 
 export {
   useFormManager,
-  FormInputProperties as FormInput,
+  FormInputProperties,
   IFormAction,
   IFormInitalState,
   IState,

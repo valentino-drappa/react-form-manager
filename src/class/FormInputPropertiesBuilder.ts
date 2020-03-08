@@ -5,6 +5,7 @@ import { ICustomProperty, IStateInputs } from '..';
 import { isValidArray } from '../utils/array.utils';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
+import { createUpdateId } from '../utils/formInputProperties.utils';
 
 export class FormInputPropertiesBuilder implements IFormInputProperties {
   id?: string;
@@ -19,6 +20,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   availableValues: IFormInputAvailableValue[] = [];
   customProperties: ICustomProperty;
   originalDisabledValue: boolean = false;
+  updateId: string = '';
 
   constructor(name: string) {
     this.name = name;
@@ -86,6 +88,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
 
   build(): IStateInputs {
     const formInputProperties = new FormInputProperties(this);
+    formInputProperties.updateId = createUpdateId(this.value);
     formInputProperties.isValid = validateFormInput(this.value, this.validators).length === 0;
     return { [this.name]: formInputProperties };
   }

@@ -17,6 +17,7 @@ export class FormInputProperties implements IFormInputProperties {
   availableValues: IFormInputAvailableValue[];
   customProperties: ICustomProperty;
   originalDisabledValue: boolean;
+  updateId: string;
 
   constructor(build: IFormInputProperties) {
     this.id = build.id;
@@ -31,6 +32,7 @@ export class FormInputProperties implements IFormInputProperties {
     this.availableValues = build.availableValues;
     this.customProperties = build.customProperties;
     this.originalDisabledValue = build.disabled;
+    this.updateId = build.updateId;
   }
 
   static Builder(name: string) {

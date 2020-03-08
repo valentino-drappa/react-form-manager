@@ -7,8 +7,8 @@ import { IFormValidator } from '../interface/form/FormValidatior.interface';
 import { IFormInitalState } from '..';
 import { isValidArray } from './array.utils';
 import { IFormPropertiesMutation } from '../interface/form/mutation/FormPropertiesMutation.interface';
-import { updateFormInputDisabledValue } from './formInputProperties.utils';
-import { typeBoolean, typeString, typeCheckbox } from '../constant/FormManager.constant';
+import { updateFormInputDisabledValue, createUpdateId } from './formInputProperties.utils';
+import { typeBoolean, typeCheckbox } from '../constant/FormManager.constant';
 
 const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInputProperties) => {
   const hasMultipleValues = formInputProps.availableValues.length > 0;
@@ -83,6 +83,7 @@ export const handleInputChange = (
     value: _inputValue,
     isValid: errors.length === 0,
     errors,
+    updateId: createUpdateId(_inputValue),
   };
   const _formInputs = { ...formInputs, [name]: { ...formInputDataUpdated } };
   const { formProperties } = currentState;
