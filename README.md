@@ -30,7 +30,7 @@ const { <br />
     resetForm <br />
     handleFormChange <br />
     getFormValues <br />
-    getInput <br />
+    getInputProperties <br />
     addInputs <br />
     updateInputs <br />
     removeInputs <br />
@@ -50,15 +50,14 @@ const { <br />
 | resetForm        | resetForm()                           | void                       | reset the form with the initialValues |
 | handleFormChange | handleFormChange(onformOnChangeEvent) | void                       | Pass the formOnChangeEvent to this method|
 | getFormValues    | getFormValues()                       | {k:v} | return an object with form values<br /><br />k: input name<br />v=input value(s)     |
-| getInput         | getInput(x)                 | input properties | return the input properties<br /><br />x: input name           |
+| getInputProperties         | getInputProperties(x)                 | input properties | return the input properties<br /><br />x: input name           |
 | addInputs | addInputs({k: v}) | void | add new input(s)<br /><br />k:  input name<br />v: input properties |
 | updateInputs | addInputs({k: v}) | void | update input(s)<br /><br />k: input name<br />v: input properties to update |
 | removeInputs | removeInputs(x) | void | remove input(s)<br /><br />x: array of input name
 | validateInputs| validateInputs(x) | void | will check the validity of your form and inputs. Each input.errors and formErros will be regenared,<br /><br />x: null = all inputs will be checked<br /><br />x: string[] = only the inputs is the list will be checked  |
 |updateFormProps| updateFormProps(x) | void | update the form properties<br /><br />x: FormProperties|
 | emitLastFieldUpdated | emitLastFieldUpdated(x) | void | configure if you want to receive the name of the latest input updated<br /><br />x: true -> lastFieldUpdated will be setted<br />x=false -> lastfieldUpdated = null<br>default is true|
-| lastFieldUpdated | lastFieldUpdated | { inputName: x } or null | x: contains the name of the latest input updated if emitLastFieldUpdated = true<br /><br />
-return null if emitLastFieldUpdated = false|
+| lastFieldUpdated | lastFieldUpdated | { inputName: x } or null | x: contains the name of the latest input updated if emitLastFieldUpdated = true<br /><br />return null if emitLastFieldUpdated = false|
 | isFormDisabled | isFormDisabled | boolean | contains the form disabled status |
 | isFormValid | isFormValid | boolean | contais the form validity status |
 | formErrors | formErros | x | contains the form errors<br /><br />x: empty array if no errors<br />x: string[] array of string if the form has errors|

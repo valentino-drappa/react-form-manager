@@ -1,10 +1,10 @@
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
-import { FormInputBuilder } from './FormInputBuilder';
+import { FormInputPropertiesBuilder } from './FormInputPropertiesBuilder';
 import { ICustomProperty } from '../interface/common/CustomProperty.interface';
 
-export class FormInput implements IFormInputProperties {
+export class FormInputProperties implements IFormInputProperties {
   id?: string;
   name: string;
   value: any;
@@ -17,6 +17,7 @@ export class FormInput implements IFormInputProperties {
   availableValues: IFormInputAvailableValue[];
   customProperties: ICustomProperty;
   originalDisabledValue: boolean;
+  updateId: string;
 
   constructor(build: IFormInputProperties) {
     this.id = build.id;
@@ -31,9 +32,10 @@ export class FormInput implements IFormInputProperties {
     this.availableValues = build.availableValues;
     this.customProperties = build.customProperties;
     this.originalDisabledValue = build.disabled;
+    this.updateId = build.updateId;
   }
 
   static Builder(name: string) {
-    return new FormInputBuilder(name);
+    return new FormInputPropertiesBuilder(name);
   }
 }

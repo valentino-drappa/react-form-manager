@@ -11,8 +11,11 @@ export const updateFormInputDisabledValue = (formInputs: IStateInputs, disableIn
         ...formInputs[inputKey],
         originalDisabledValue: !!formInputs[inputKey].disabled,
         disabled: !!disableInput ? disableInput : formInputs[inputKey].originalDisabledValue,
+        updateId: createUpdateId(formInputs[inputKey].value),
       },
     }),
     {},
   );
 };
+
+export const createUpdateId = (value: any) => `${value}${Math.random()}`;

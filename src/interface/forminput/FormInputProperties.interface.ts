@@ -15,4 +15,5 @@ export interface IFormInputProperties {
   availableValues: IFormInputAvailableValue[];
   customProperties: ICustomProperty;
   originalDisabledValue: boolean;
+  updateId: string;
 }

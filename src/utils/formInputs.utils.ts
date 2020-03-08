@@ -5,6 +5,7 @@ import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
 import { getFormValidity } from './form.utils';
+import { createUpdateId } from './formInputProperties.utils';
 
 const createIState = (newFormInputs: IStateInputs, currentState: IState): IState => {
   const { formProperties } = currentState;
@@ -35,6 +36,7 @@ const updateFormInputData = (currentFormInput: IFormInputProperties, updatedForm
     isValid: errors.length === 0,
     validators,
     ...restParameters,
+    updateId: createUpdateId(newValue),
   };
 };
 
@@ -61,7 +63,6 @@ export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentStat
   }
 
   const { formInputs } = currentState;
-  const { formProperties } = currentState;
 
   /* update only existing inputs */
   const inputList = Object.keys(formInputsToUpdate).filter(x => formInputs[x]);
