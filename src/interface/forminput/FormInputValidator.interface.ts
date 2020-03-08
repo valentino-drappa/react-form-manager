@@ -1,3 +1,3 @@
 export interface IFormInputValidator {
-  validate(value: any): string | null
-};
+  validate(value: any): string | null;
+}

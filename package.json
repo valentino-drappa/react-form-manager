@@ -1,6 +1,6 @@
 {
 	"name": "vdr-react-form-manager",
-	"version": "1.0.6",
+	"version": "1.0.9",
 	"description": "Form manager",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
