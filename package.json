@@ -1,6 +1,6 @@
 {
 	"name": "vdr-react-form-manager",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "Form manager",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -19,11 +19,7 @@
 		"type": "git",
 		"url": "git+https://github.com/valentino-drappa/react-form-manager.git"
 	},
-	"keywords": [
-		"react",
-		"form",
-		"form manager"
-	],
+	"keywords": ["react", "form", "form manager"],
 	"author": "Valentino Drappa",
 	"license": "ISC",
 	"bugs": {
@@ -42,7 +38,5 @@
 	"dependencies": {
 		"ansi-styles": "^4.2.1"
 	},
-	"files": [
-		"lib/**/*"
-	]
+	"files": ["lib/**/*"]
 }
