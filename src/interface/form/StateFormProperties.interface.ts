@@ -1,6 +1,5 @@
-import { IFormInputProperties } from '../forminput/FormInputProperties.interface';
-import { IFormValidator } from '../..';
 import { ICustomProperty } from '../common/CustomProperty.interface';
+import { IFormValidator } from './FormValidatior.interface';
 
 export interface IStateFormProperties {
   formValidators: IFormValidator[];

@@ -1,11 +1,12 @@
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
 import { FormInputProperties } from './FormInputProperties';
-import { ICustomProperty, IStateInputs } from '..';
 import { isValidArray } from '../utils/array.utils';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { createUpdateId } from '../utils/formInputProperties.utils';
+import { ICustomProperty } from '../interface/common/CustomProperty.interface';
+import { IStateInputs } from '../interface/form/StateInptus.interface';
 
 export class FormInputPropertiesBuilder implements IFormInputProperties {
   id?: string;
