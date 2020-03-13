@@ -4,5 +4,5 @@ import { IKeyAny } from '../../common/KeyAny.interface';
 export interface IFormPropertiesMutation {
   formValidators?: IFormValidator[];
   isFormDisabled?: boolean;
-  formCustomProps?: IKeyAny;
+  formCustomsProps?: IKeyAny;
 }

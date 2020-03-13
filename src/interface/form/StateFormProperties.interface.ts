@@ -6,5 +6,5 @@ export interface IStateFormProperties {
   isFormDisabled: boolean;
   isFormValid: boolean;
   formErrors: string[];
-  formCustomProps: IKeyAny;
+  formCustomsProps: IKeyAny;
 }

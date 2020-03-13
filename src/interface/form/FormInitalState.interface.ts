@@ -5,5 +5,5 @@ import { IKeyAny } from '../common/KeyAny.interface';
 export interface IFormInitalState {
   formInputs: IStateInputs;
   formValidators?: IFormValidator[];
-  formCustomProps?: IKeyAny;
+  formCustomsProps?: IKeyAny;
 }
