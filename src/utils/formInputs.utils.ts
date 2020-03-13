@@ -7,6 +7,14 @@ import { IFormInputMutationData } from '../interface/forminput/mutation/FormInpu
 import { getFormValidity } from './form.utils';
 import { createUpdateId } from './formInputProperties.utils';
 
+/* Form is disabled, so we need to set his value to the inputs */
+const forceDisabledInput = (formInputs: IStateInputs) => {
+  Object.keys(formInputs).forEach(x => {
+    formInputs[x].originalDisabledValue = formInputs[x].disabled;
+    formInputs[x].disabled = true;
+  });
+};
+
 const createIState = (newFormInputs: IStateInputs, currentState: IState): IState => {
   const { formProperties } = currentState;
   return {
@@ -52,6 +60,11 @@ export const addInputs = (formInputsToAdd: IStateInputs, currentState: IState): 
     return currentState;
   }
 
+  /* form is disabled */
+  if (currentState.formProperties.isFormDisabled === true) {
+    forceDisabledInput(formInputsToAdd);
+  }
+
   /* keep order to not overwritte existing inputs */
   const newFormInputs = { ...formInputsToAdd, ...formInputs };
   return createIState(newFormInputs, currentState);
@@ -81,8 +94,16 @@ export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentStat
     {},
   );
 
+  /* form is disabled */
+  if (currentState.formProperties.isFormDisabled === true) {
+    forceDisabledInput(updatedFormInputs);
+  }
+
   /* keep order to not overwritte updated inputs */
-  const newFormInputs = { ...formInputs, ...updatedFormInputs };
+  const newFormInputs = {
+    ...formInputs,
+    ...updatedFormInputs,
+  };
   return createIState(newFormInputs, currentState);
 };
 
