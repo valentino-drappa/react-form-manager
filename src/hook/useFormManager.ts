@@ -9,7 +9,6 @@ import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMut
 import { resetState } from '../utils/form.utils';
 import { IFormPropertiesMutation } from '..';
 import { IKeyAny } from '../interface/common/KeyAny.interface';
-import { IKeyAny } from '../../lib/interface/common/KeyAny.interface';
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   const init = useCallback((formInitalState: IFormInitalState): IState => {
