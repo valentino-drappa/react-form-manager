@@ -85,7 +85,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   }, []);
 
   const { lastFieldUpdated } = state;
-  const { formErrors, isFormDisabled, isFormValid } = state.formProperties;
+  const { formErrors, isFormDisabled, isFormValid, formCustomProps } = state.formProperties;
   return {
     handleFormChange,
     getFormValues,
@@ -101,5 +101,6 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     isFormDisabled,
     isFormValid,
     formErrors,
+    formCustomProps,
   };
 };

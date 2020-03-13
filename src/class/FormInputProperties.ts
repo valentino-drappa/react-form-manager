@@ -2,7 +2,7 @@ import { IFormInputProperties } from '../interface/forminput/FormInputProperties
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
 import { FormInputPropertiesBuilder } from './FormInputPropertiesBuilder';
-import { ICustomProperty } from '../interface/common/CustomProperty.interface';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 export class FormInputProperties implements IFormInputProperties {
   id?: string;
@@ -15,7 +15,7 @@ export class FormInputProperties implements IFormInputProperties {
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  customProperties: ICustomProperty;
+  customProperties: IKeyAny;
   originalDisabledValue: boolean;
   updateId: string;
 

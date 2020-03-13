@@ -5,8 +5,8 @@ import { isValidArray } from '../utils/array.utils';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
 import { createUpdateId } from '../utils/formInputProperties.utils';
-import { ICustomProperty } from '../interface/common/CustomProperty.interface';
 import { IStateInputs } from '../interface/form/StateInptus.interface';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 export class FormInputPropertiesBuilder implements IFormInputProperties {
   id?: string;
@@ -19,7 +19,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   classNames: string[] = [];
   validators: IFormInputValidator[] = [];
   availableValues: IFormInputAvailableValue[] = [];
-  customProperties: ICustomProperty;
+  customProperties: IKeyAny;
   originalDisabledValue: boolean = false;
   updateId: string = '';
 
@@ -77,7 +77,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
     return this;
   }
 
-  addProperty(inputPropertiesIn: ICustomProperty) {
+  addProperty(inputPropertiesIn: any) {
     this.customProperties = { ...this.customProperties, ...inputPropertiesIn };
     return this;
   }
