@@ -11,6 +11,7 @@ import { IFormInputValidator } from './interface/forminput/FormInputValidator.in
 import { IFormInputMutation } from './interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from './interface/forminput/mutation/FormInputMutationData.interface';
 import { IFormPropertiesMutation } from './interface/form/mutation/FormPropertiesMutation.interface';
+import { IKeyAny } from './interface/common/KeyAny.interface';
 
 export {
   useFormManager,
@@ -26,4 +27,5 @@ export {
   IFormInputMutation,
   IFormInputMutationData,
   IFormPropertiesMutation,
+  IKeyAny,
 };

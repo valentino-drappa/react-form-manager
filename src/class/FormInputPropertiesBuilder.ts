@@ -19,13 +19,13 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   classNames: string[] = [];
   validators: IFormInputValidator[] = [];
   availableValues: IFormInputAvailableValue[] = [];
-  customProperties: IKeyAny;
+  customProps: IKeyAny;
   originalDisabledValue: boolean = false;
   updateId: string = '';
 
   constructor(name: string) {
     this.name = name;
-    this.customProperties = {};
+    this.customProps = {};
   }
 
   addId(id: string): FormInputPropertiesBuilder {
@@ -77,13 +77,13 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
     return this;
   }
 
-  addProperty(inputPropertiesIn: any) {
-    this.customProperties = { ...this.customProperties, ...inputPropertiesIn };
+  addProperty(inputPropertiesIn: IKeyAny) {
+    this.customProps = { ...this.customProps, ...inputPropertiesIn };
     return this;
   }
 
   removeProperty(propertyName: any): FormInputPropertiesBuilder {
-    delete this.customProperties[propertyName];
+    delete this.customProps[propertyName];
     return this;
   }
 

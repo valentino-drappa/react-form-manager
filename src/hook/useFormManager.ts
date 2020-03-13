@@ -9,6 +9,7 @@ import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMut
 import { resetState } from '../utils/form.utils';
 import { IFormPropertiesMutation } from '..';
 /* don't remove unused import -> prevent error TS4023 */
+import { IStateFormProperties } from '../interface/form/StateFormProperties.interface';
 import { IFormValidator } from '../interface/form/FormValidatior.interface';
 import { IKeyAny } from '../interface/common/KeyAny.interface';
 
@@ -79,15 +80,15 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     dispatch({ type: EFormActionType.VALIDATE_INPUTS, payload: inputNameList });
   }, []);
 
+  const hasInput = (inputName: string) => !!state.formInputs[inputName];
+
   const emitLastFieldUpdated = useCallback((isEmissionEnabled: boolean) => {
     emitLastFieldUpdatedStatus.current = isEmissionEnabled;
   }, []);
 
-  const updateFormProps = useCallback((formProperties: IFormPropertiesMutation) => {
-    dispatch({ type: EFormActionType.UPDATE_FORM_PROPS, payload: formProperties });
+  const setFormProps = useCallback((formProperties: IFormPropertiesMutation) => {
+    dispatch({ type: EFormActionType.SET_FORM_PROPS, payload: formProperties });
   }, []);
-
-  const { lastFieldUpdated } = state;
 
   return {
     handleFormChange,
@@ -97,10 +98,11 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     updateInputs,
     removeInputs,
     validateInputs,
+    hasInput,
     resetForm,
-    updateFormProps,
+    setFormProps,
     emitLastFieldUpdated,
-    ...state.formProperties,
-    lastFieldUpdated,
+    formProperties: { ...state.formProperties },
+    lastFieldUpdated: state.lastFieldUpdated,
   };
 };

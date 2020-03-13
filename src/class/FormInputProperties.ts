@@ -15,7 +15,7 @@ export class FormInputProperties implements IFormInputProperties {
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  customProperties: IKeyAny;
+  customProps: IKeyAny;
   originalDisabledValue: boolean;
   updateId: string;
 
@@ -30,7 +30,7 @@ export class FormInputProperties implements IFormInputProperties {
     this.classNames = build.classNames;
     this.validators = build.validators;
     this.availableValues = build.availableValues;
-    this.customProperties = build.customProperties;
+    this.customProps = build.customProps;
     this.originalDisabledValue = build.disabled;
     this.updateId = build.updateId;
   }

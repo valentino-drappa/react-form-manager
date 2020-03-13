@@ -116,7 +116,7 @@ export const resetState = ({ formInputs, formValidators, formCustomsProps }: IFo
   } as IState;
 };
 
-export const updateFormProperties = (formPropertiesMutation: IFormPropertiesMutation, currentState: IState): IState => {
+export const setFormProperties = (formPropertiesMutation: IFormPropertiesMutation, currentState: IState): IState => {
   if (isInvalidFormPropertiesMutation(formPropertiesMutation || {})) {
     return currentState;
   }
@@ -139,8 +139,8 @@ export const updateFormProperties = (formPropertiesMutation: IFormPropertiesMuta
   }
 
   let _formCustomsProps = formCustomsProps;
-  if (typeof mutformCustomsProps === 'object' && Object.keys(mutformCustomsProps).length) {
-    _formCustomsProps = { ...formCustomsProps, ...mutformCustomsProps };
+  if (typeof mutformCustomsProps === 'object') {
+    _formCustomsProps = mutformCustomsProps;
   }
 
   return {

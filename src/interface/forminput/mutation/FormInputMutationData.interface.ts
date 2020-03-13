@@ -9,5 +9,5 @@ export interface IFormInputMutationData {
   classNames?: string[];
   validators?: IFormInputValidator[];
   availableValues?: IFormInputAvailableValue[];
-  customProperties?: IKeyAny;
+  customProps?: IKeyAny;
 }

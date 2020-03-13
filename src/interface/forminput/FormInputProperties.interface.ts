@@ -13,7 +13,7 @@ export interface IFormInputProperties {
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  customProperties: IKeyAny;
+  customProps: IKeyAny;
   originalDisabledValue: boolean;
   updateId: string;
 }
