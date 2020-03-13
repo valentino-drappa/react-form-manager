@@ -8,7 +8,9 @@ import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { resetState } from '../utils/form.utils';
 import { IFormPropertiesMutation } from '..';
-import { IKeyAny } from '../interface/common/KeyAny.interface'; /* Don't remove - prevent TS4023 error*/
+/* don't remove unused import -> prevent error TS4023 */
+import { IFormValidator } from '../interface/form/FormValidatior.interface';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   const init = useCallback((formInitalState: IFormInitalState): IState => {
@@ -86,7 +88,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
   }, []);
 
   const { lastFieldUpdated } = state;
-  const { formErrors, isFormDisabled, isFormValid, formCustomsProps } = state.formProperties;
+
   return {
     handleFormChange,
     getFormValues,
@@ -98,10 +100,7 @@ export const useFormManager = (formInitialStateValues: IFormInitalState) => {
     resetForm,
     updateFormProps,
     emitLastFieldUpdated,
+    ...state.formProperties,
     lastFieldUpdated,
-    isFormDisabled,
-    isFormValid,
-    formErrors,
-    formCustomsProps,
   };
 };
