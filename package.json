@@ -19,7 +19,11 @@
 		"type": "git",
 		"url": "git+https://github.com/valentino-drappa/react-form-manager.git"
 	},
-	"keywords": ["react", "form", "form manager"],
+	"keywords": [
+		"react",
+		"form",
+		"form manager"
+	],
 	"author": "Valentino Drappa",
 	"license": "ISC",
 	"bugs": {
@@ -29,14 +33,15 @@
 	"homepage": "https://github.com/valentino-drappa/react-form-manager#readme",
 	"devDependencies": {
 		"@types/react": "^16.9.23",
+		"ansi-styles": "^4.2.1",
 		"prettier": "^1.19.1",
 		"react": "^16.9.0",
 		"tslint": "^6.0.0",
 		"tslint-config-prettier": "^1.18.0",
 		"typescript": "^3.8.3"
 	},
-	"dependencies": {
-		"ansi-styles": "^4.2.1"
-	},
-	"files": ["lib/**/*"]
+	"dependencies": {},
+	"files": [
+		"lib/**/*"
+	]
 }

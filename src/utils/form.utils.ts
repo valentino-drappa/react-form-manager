@@ -9,6 +9,8 @@ import { isValidArray } from './array.utils';
 import { IFormPropertiesMutation } from '../interface/form/mutation/FormPropertiesMutation.interface';
 import { updateFormInputDisabledValue, createUpdateId } from './formInputProperties.utils';
 import { typeBoolean, typeCheckbox } from '../constant/FormManager.constant';
+import { isValidObject } from './object.utils';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInputProperties) => {
   const hasMultipleValues = formInputProps.availableValues.length > 0;
@@ -35,14 +37,16 @@ const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInp
 const isInvalidFormPropertiesMutation = (formPropertiesMutation: IFormPropertiesMutation) =>
   !formPropertiesMutation.formValidators &&
   typeof formPropertiesMutation.isFormDisabled !== typeBoolean &&
-  !formPropertiesMutation.formCustomsProps;
+  !formPropertiesMutation.formCustomsProps &&
+  !isValidArray(formPropertiesMutation.formClasseNames);
 
 const getFormPropertiesMutation = (formPropertiesMutation: IFormPropertiesMutation) => {
-  const { isFormDisabled, formValidators, formCustomsProps } = formPropertiesMutation;
+  const { isFormDisabled, formValidators, formCustomsProps, formClasseNames } = formPropertiesMutation;
   return {
     mutIsFormDisabled: !!isFormDisabled,
     mutFormValidators: formValidators,
-    mutformCustomsProps: formCustomsProps,
+    mutFormCustomsProps: formCustomsProps,
+    mutFormClassNames: formClasseNames,
   };
 };
 const getAuthorizedFormValidators = (formValidators: IFormValidator[]): IFormValidator[] => {
@@ -110,7 +114,12 @@ export const handleInputChange = (
   } as IState;
 };
 
-export const resetState = ({ formInputs, formValidators, formCustomsProps }: IFormInitalState): IState => {
+export const resetState = ({
+  formInputs,
+  formValidators,
+  formCustomsProps,
+  formClassNames,
+}: IFormInitalState): IState => {
   const authorizedFormValidators = getAuthorizedFormValidators(formValidators || []);
 
   const { isFormValid } = getFormValidity(formInputs, authorizedFormValidators);
@@ -124,7 +133,8 @@ export const resetState = ({ formInputs, formValidators, formCustomsProps }: IFo
       isFormTouched: false,
       isFormPristine: true,
       formErrors: [],
-      formCustomsProps,
+      formCustomsProps: formCustomsProps || {},
+      formClasseNames: isValidArray(formClassNames) ? formClassNames : [],
     },
     lastFieldUpdated: null,
   } as IState;
@@ -134,15 +144,20 @@ export const setFormProperties = (formPropertiesMutation: IFormPropertiesMutatio
   if (isInvalidFormPropertiesMutation(formPropertiesMutation || {})) {
     return currentState;
   }
-  const { mutIsFormDisabled, mutFormValidators, mutformCustomsProps } = getFormPropertiesMutation(
+  const { mutIsFormDisabled, mutFormValidators, mutFormCustomsProps, mutFormClassNames } = getFormPropertiesMutation(
     formPropertiesMutation,
   );
   const { formInputs, formProperties } = currentState;
-  const { isFormDisabled, formValidators, formCustomsProps } = currentState.formProperties;
+  const { isFormDisabled, formValidators, formCustomsProps, formClasseNames } = currentState.formProperties;
 
   let _formValidators = formValidators;
-  if (isValidArray(mutFormValidators || [])) {
+  if (isValidArray(mutFormValidators)) {
     _formValidators = getAuthorizedFormValidators(mutFormValidators as IFormValidator[]);
+  }
+
+  let _formClasseNames = formClasseNames;
+  if (isValidArray(mutFormClassNames)) {
+    _formClasseNames = mutFormClassNames as string[];
   }
 
   let _formInputs = formInputs;
@@ -153,8 +168,8 @@ export const setFormProperties = (formPropertiesMutation: IFormPropertiesMutatio
   }
 
   let _formCustomsProps = formCustomsProps;
-  if (typeof mutformCustomsProps === 'object') {
-    _formCustomsProps = mutformCustomsProps;
+  if (isValidObject(mutFormCustomsProps)) {
+    _formCustomsProps = mutFormCustomsProps as IKeyAny;
   }
 
   return {
@@ -164,6 +179,7 @@ export const setFormProperties = (formPropertiesMutation: IFormPropertiesMutatio
       formValidators: _formValidators,
       isFormDisabled: _isFormDisabled,
       formCustomsProps: _formCustomsProps,
+      formClasseNames: _formClasseNames,
       ...getFormValidity(_formInputs, _formValidators),
     },
     lastFieldUpdated: null,

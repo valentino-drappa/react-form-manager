@@ -5,7 +5,10 @@ import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
 import { getFormValidity, getIsFormTouched, getIsFormPristine } from './form.utils';
-import { createUpdateId } from './formInputProperties.utils';
+import { createUpdateId, getInputAvailableValues, getInputValidators } from './formInputProperties.utils';
+import { typeBoolean } from '../constant/FormManager.constant';
+import { isValidArray } from './array.utils';
+import { isValidObject } from './object.utils';
 
 /* Form is disabled, so we need to set his value to the inputs */
 const forceDisabledInput = (formInputs: IStateInputs) => {
@@ -32,21 +35,38 @@ const createIState = (newFormInputs: IStateInputs, currentState: IState): IState
 const isInvalidFormStateInputs = (formStateInputs: IStateInputs | IFormInputMutation) =>
   !formStateInputs || !Object.keys(formStateInputs).length;
 
+const getUpdatedInputProps = (
+  currentFormInput: IFormInputProperties,
+  updatedFormInput: IFormInputMutationData,
+): IFormInputMutationData => {
+  const { label, disabled, classNames, validators, availableValues, customProps } = updatedFormInput;
+  return {
+    disabled: typeof disabled === typeBoolean ? disabled : currentFormInput.disabled,
+    classNames: isValidArray(classNames) ? classNames : currentFormInput.classNames,
+    validators: isValidArray(validators) ? validators : getInputValidators(validators),
+    availableValues: isValidArray(availableValues)
+      ? getInputAvailableValues(availableValues)
+      : currentFormInput.availableValues,
+    customProps: isValidObject(customProps) ? customProps : currentFormInput.customProps,
+  } as IFormInputMutationData;
+};
+
 const updateFormInputData = (currentFormInput: IFormInputProperties, updatedFormInput: IFormInputMutationData) => {
   const params = updatedFormInput || {};
-  const { value, ...restParameters } = params;
-  // need to use hasOwnProperty because we can have the property 'validators' to null/undefined
-  const validators = params.hasOwnProperty('validators') ? params.validators : currentFormInput.validators;
+  const { value } = params;
   let newValue;
   let isTouched;
-  if (value === currentFormInput.value) {
-    newValue = currentFormInput.value;
-    isTouched = currentFormInput.isTouched;
-  } else {
+  // tslint:disable-next-line:triple-equals
+
+  if (value != undefined && value !== currentFormInput.value) {
     newValue = value;
     isTouched = true;
+  } else {
+    newValue = currentFormInput.value;
+    isTouched = currentFormInput.isTouched;
   }
-  const errors = validateFormInput(newValue, validators);
+  const updatedInputProps = getUpdatedInputProps(currentFormInput, updatedFormInput);
+  const errors = validateFormInput(newValue, updatedInputProps.validators);
   return {
     ...currentFormInput,
     value: newValue,
@@ -54,8 +74,7 @@ const updateFormInputData = (currentFormInput: IFormInputProperties, updatedForm
     isPristine: newValue === currentFormInput.originalValue,
     errors,
     isValid: errors.length === 0,
-    validators,
-    ...restParameters,
+    ...updatedInputProps,
     updateId: createUpdateId(newValue),
   };
 };

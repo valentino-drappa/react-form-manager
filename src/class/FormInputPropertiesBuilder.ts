@@ -4,7 +4,7 @@ import { FormInputProperties } from './FormInputProperties';
 import { isValidArray } from '../utils/array.utils';
 import { validateFormInput } from '../utils/formInputsValidator.utils';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
-import { createUpdateId } from '../utils/formInputProperties.utils';
+import { createUpdateId, getInputValidators, getInputAvailableValues } from '../utils/formInputProperties.utils';
 import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IKeyAny } from '../interface/common/KeyAny.interface';
 
@@ -54,9 +54,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   }
 
   addValidators(validators: IFormInputValidator[]): FormInputPropertiesBuilder {
-    if (isValidArray(validators)) {
-      this.validators = validators.filter((x: IFormInputValidator) => typeof x.validate === 'function');
-    }
+    this.validators = getInputValidators(validators);
     return this;
   }
 
@@ -65,7 +63,8 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   }
 
   addAvailableValueList(valueList: IFormInputAvailableValue[]): FormInputPropertiesBuilder {
-    if (!isValidArray(valueList)) {
+    const newValues = getInputAvailableValues(valueList);
+    if (!newValues.length) {
       return this;
     }
     if (!this.availableValues) {

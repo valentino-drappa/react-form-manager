@@ -6,4 +6,5 @@ export interface IFormInitalState {
   formInputs: IStateInputs;
   formValidators?: IFormValidator[];
   formCustomsProps?: IKeyAny;
+  formClassNames?: string[];
 }
