@@ -22,6 +22,9 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   customProps: IKeyAny;
   originalDisabledValue: boolean = false;
   updateId: string = '';
+  originalValue: any = '';
+  isTouched: boolean = false;
+  isPristine: boolean = true;
 
   constructor(name: string) {
     this.name = name;
@@ -90,7 +93,9 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   build(): IStateInputs {
     const formInputProperties = new FormInputProperties(this);
     formInputProperties.updateId = createUpdateId(this.value);
-    formInputProperties.isValid = validateFormInput(this.value, this.validators).length === 0;
+    formInputProperties.originalValue = this.value;
+    formInputProperties.errors = validateFormInput(this.value, this.validators);
+    formInputProperties.isValid = formInputProperties.errors.length === 0;
     return { [this.name]: formInputProperties };
   }
 }

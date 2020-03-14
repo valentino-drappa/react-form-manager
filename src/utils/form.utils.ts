@@ -51,6 +51,14 @@ const getAuthorizedFormValidators = (formValidators: IFormValidator[]): IFormVal
     : [];
 };
 
+export const getIsFormPristine = (formInputs: IStateInputs) => {
+  return Object.keys(formInputs).every(x => formInputs[x].isPristine);
+};
+
+export const getIsFormTouched = (formInputs: IStateInputs) => {
+  return Object.keys(formInputs).some(x => formInputs[x].isTouched);
+};
+
 export const getFormValidity = (formInputs: IStateInputs, formValidators: IFormValidator[]) => {
   const hasInvalidInputs = Object.keys(formInputs).some(x => !formInputs[x].isValid);
   const formErrors = hasInvalidInputs ? [] : validateForm(formInputs, formValidators);
@@ -82,6 +90,8 @@ export const handleInputChange = (
     ...currentFormInputData,
     value: _inputValue,
     isValid: errors.length === 0,
+    isTouched: true,
+    isPristine: _inputValue === currentFormInputData.originalValue,
     errors,
     updateId: createUpdateId(_inputValue),
   };
@@ -92,6 +102,8 @@ export const handleInputChange = (
     formInputs: _formInputs,
     formProperties: {
       ...formProperties,
+      isFormTouched: true,
+      isFormPristine: getIsFormPristine(_formInputs),
       ...getFormValidity(_formInputs, formProperties.formValidators),
     },
     lastFieldUpdated: emitLastFieldUpdatedStatus ? { inputName: name } : null,
@@ -109,6 +121,8 @@ export const resetState = ({ formInputs, formValidators, formCustomsProps }: IFo
       formValidators: authorizedFormValidators,
       isFormDisabled: false,
       isFormValid,
+      isFormTouched: false,
+      isFormPristine: true,
       formErrors: [],
       formCustomsProps,
     },

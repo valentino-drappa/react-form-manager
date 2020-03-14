@@ -4,7 +4,7 @@ import { validateFormInput } from './formInputsValidator.utils';
 import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
-import { getFormValidity } from './form.utils';
+import { getFormValidity, getIsFormTouched, getIsFormPristine } from './form.utils';
 import { createUpdateId } from './formInputProperties.utils';
 
 /* Form is disabled, so we need to set his value to the inputs */
@@ -21,6 +21,8 @@ const createIState = (newFormInputs: IStateInputs, currentState: IState): IState
     formInputs: newFormInputs,
     formProperties: {
       ...formProperties,
+      isFormTouched: formProperties.isFormTouched ? formProperties.isFormTouched : getIsFormTouched(newFormInputs),
+      isFormPristine: getIsFormPristine(newFormInputs),
       ...getFormValidity(newFormInputs, formProperties.formValidators),
     },
     lastFieldUpdated: null,
@@ -35,11 +37,21 @@ const updateFormInputData = (currentFormInput: IFormInputProperties, updatedForm
   const { value, ...restParameters } = params;
   // need to use hasOwnProperty because we can have the property 'validators' to null/undefined
   const validators = params.hasOwnProperty('validators') ? params.validators : currentFormInput.validators;
-  const newValue = value == null ? currentFormInput.value : value;
+  let newValue;
+  let isTouched;
+  if (value === currentFormInput.value) {
+    newValue = currentFormInput.value;
+    isTouched = currentFormInput.isTouched;
+  } else {
+    newValue = value;
+    isTouched = true;
+  }
   const errors = validateFormInput(newValue, validators);
   return {
     ...currentFormInput,
     value: newValue,
+    isTouched,
+    isPristine: newValue === currentFormInput.originalValue,
     errors,
     isValid: errors.length === 0,
     validators,

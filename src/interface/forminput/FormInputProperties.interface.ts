@@ -16,4 +16,7 @@ export interface IFormInputProperties {
   customProps: IKeyAny;
   originalDisabledValue: boolean;
   updateId: string;
+  originalValue: any;
+  isTouched: boolean;
+  isPristine: boolean;
 }
