@@ -56,8 +56,8 @@ const updateFormInputData = (currentFormInput: IFormInputProperties, updatedForm
   const { value } = params;
   let newValue;
   let isTouched;
-  // tslint:disable-next-line:triple-equals
 
+  // tslint:disable-next-line:triple-equals
   if (value != undefined && value !== currentFormInput.value) {
     newValue = value;
     isTouched = true;

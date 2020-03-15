@@ -7,6 +7,7 @@ import { IFormInputProperties } from '../interface/forminput/FormInputProperties
 import { createUpdateId, getInputValidators, getInputAvailableValues } from '../utils/formInputProperties.utils';
 import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IKeyAny } from '../interface/common/KeyAny.interface';
+import { typeBoolean } from '../constant/FormManager.constant';
 
 export class FormInputPropertiesBuilder implements IFormInputProperties {
   id?: string;
@@ -42,7 +43,7 @@ export class FormInputPropertiesBuilder implements IFormInputProperties {
   }
 
   addDisabled(disabled: boolean): FormInputPropertiesBuilder {
-    this.disabled = disabled == null ? false : disabled;
+    this.disabled = typeof disabled !== typeBoolean ? false : disabled;
     return this;
   }
 
