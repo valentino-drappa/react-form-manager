@@ -9,6 +9,8 @@ import { isValidArray } from './array.utils';
 import { IFormPropertiesMutation } from '../interface/form/mutation/FormPropertiesMutation.interface';
 import { updateFormInputDisabledValue, createUpdateId } from './formInputProperties.utils';
 import { typeBoolean, typeCheckbox } from '../constant/FormManager.constant';
+import { isValidObject } from './object.utils';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInputProperties) => {
   const hasMultipleValues = formInputProps.availableValues.length > 0;
@@ -35,20 +37,30 @@ const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInp
 const isInvalidFormPropertiesMutation = (formPropertiesMutation: IFormPropertiesMutation) =>
   !formPropertiesMutation.formValidators &&
   typeof formPropertiesMutation.isFormDisabled !== typeBoolean &&
-  !formPropertiesMutation.formCustomProperties;
+  !formPropertiesMutation.formCustomsProps &&
+  !isValidArray(formPropertiesMutation.formClasseNames);
 
 const getFormPropertiesMutation = (formPropertiesMutation: IFormPropertiesMutation) => {
-  const { isFormDisabled, formValidators, formCustomProperties } = formPropertiesMutation;
+  const { isFormDisabled, formValidators, formCustomsProps, formClasseNames } = formPropertiesMutation;
   return {
     mutIsFormDisabled: !!isFormDisabled,
     mutFormValidators: formValidators,
-    mutFormCustomProperties: formCustomProperties,
+    mutFormCustomsProps: formCustomsProps,
+    mutFormClassNames: formClasseNames,
   };
 };
 const getAuthorizedFormValidators = (formValidators: IFormValidator[]): IFormValidator[] => {
   return isValidArray(formValidators)
     ? formValidators.filter((x: IFormValidator) => typeof x.validateForm === 'function')
     : [];
+};
+
+export const getIsFormPristine = (formInputs: IStateInputs) => {
+  return Object.keys(formInputs).every(x => formInputs[x].isPristine);
+};
+
+export const getIsFormTouched = (formInputs: IStateInputs) => {
+  return Object.keys(formInputs).some(x => formInputs[x].isTouched);
 };
 
 export const getFormValidity = (formInputs: IStateInputs, formValidators: IFormValidator[]) => {
@@ -82,6 +94,8 @@ export const handleInputChange = (
     ...currentFormInputData,
     value: _inputValue,
     isValid: errors.length === 0,
+    isTouched: true,
+    isPristine: _inputValue === currentFormInputData.originalValue,
     errors,
     updateId: createUpdateId(_inputValue),
   };
@@ -92,13 +106,20 @@ export const handleInputChange = (
     formInputs: _formInputs,
     formProperties: {
       ...formProperties,
+      isFormTouched: true,
+      isFormPristine: getIsFormPristine(_formInputs),
       ...getFormValidity(_formInputs, formProperties.formValidators),
     },
     lastFieldUpdated: emitLastFieldUpdatedStatus ? { inputName: name } : null,
   } as IState;
 };
 
-export const resetState = ({ formInputs, formValidators, formCustomProperties }: IFormInitalState): IState => {
+export const resetState = ({
+  formInputs,
+  formValidators,
+  formCustomsProps,
+  formClassNames,
+}: IFormInitalState): IState => {
   const authorizedFormValidators = getAuthorizedFormValidators(formValidators || []);
 
   const { isFormValid } = getFormValidity(formInputs, authorizedFormValidators);
@@ -109,26 +130,34 @@ export const resetState = ({ formInputs, formValidators, formCustomProperties }:
       formValidators: authorizedFormValidators,
       isFormDisabled: false,
       isFormValid,
+      isFormTouched: false,
+      isFormPristine: true,
       formErrors: [],
-      formCustomProperties,
+      formCustomsProps: formCustomsProps || {},
+      formClasseNames: isValidArray(formClassNames) ? formClassNames : [],
     },
     lastFieldUpdated: null,
   } as IState;
 };
 
-export const updateFormProperties = (formPropertiesMutation: IFormPropertiesMutation, currentState: IState): IState => {
+export const setFormProperties = (formPropertiesMutation: IFormPropertiesMutation, currentState: IState): IState => {
   if (isInvalidFormPropertiesMutation(formPropertiesMutation || {})) {
     return currentState;
   }
-  const { mutIsFormDisabled, mutFormValidators, mutFormCustomProperties } = getFormPropertiesMutation(
+  const { mutIsFormDisabled, mutFormValidators, mutFormCustomsProps, mutFormClassNames } = getFormPropertiesMutation(
     formPropertiesMutation,
   );
   const { formInputs, formProperties } = currentState;
-  const { isFormDisabled, formValidators, formCustomProperties } = currentState.formProperties;
+  const { isFormDisabled, formValidators, formCustomsProps, formClasseNames } = currentState.formProperties;
 
   let _formValidators = formValidators;
-  if (isValidArray(mutFormValidators || [])) {
+  if (isValidArray(mutFormValidators)) {
     _formValidators = getAuthorizedFormValidators(mutFormValidators as IFormValidator[]);
+  }
+
+  let _formClasseNames = formClasseNames;
+  if (isValidArray(mutFormClassNames)) {
+    _formClasseNames = mutFormClassNames as string[];
   }
 
   let _formInputs = formInputs;
@@ -138,9 +167,9 @@ export const updateFormProperties = (formPropertiesMutation: IFormPropertiesMuta
     _formInputs = updateFormInputDisabledValue(_formInputs, _isFormDisabled);
   }
 
-  let _formCustomProperties = formCustomProperties;
-  if (typeof mutFormCustomProperties === 'object' && Object.keys(mutFormCustomProperties).length) {
-    _formCustomProperties = { ...formCustomProperties, ...mutFormCustomProperties };
+  let _formCustomsProps = formCustomsProps;
+  if (isValidObject(mutFormCustomsProps)) {
+    _formCustomsProps = mutFormCustomsProps as IKeyAny;
   }
 
   return {
@@ -149,7 +178,8 @@ export const updateFormProperties = (formPropertiesMutation: IFormPropertiesMuta
       ...formProperties,
       formValidators: _formValidators,
       isFormDisabled: _isFormDisabled,
-      formCustomProperties: _formCustomProperties,
+      formCustomsProps: _formCustomsProps,
+      formClasseNames: _formClasseNames,
       ...getFormValidity(_formInputs, _formValidators),
     },
     lastFieldUpdated: null,

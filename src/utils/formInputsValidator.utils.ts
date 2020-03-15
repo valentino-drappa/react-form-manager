@@ -1,4 +1,5 @@
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
+import { isValidArray } from './array.utils';
 
 export const validateFormInput = (value: string, models: IFormInputValidator[] | null | undefined): string[] => {
   const errors: string[] = [];
