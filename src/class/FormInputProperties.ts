@@ -2,7 +2,7 @@ import { IFormInputProperties } from '../interface/forminput/FormInputProperties
 import { IFormInputValidator } from '../interface/forminput/FormInputValidator.interface';
 import { IFormInputAvailableValue } from '../interface/forminput/FormInputAvailableValue.interface';
 import { FormInputPropertiesBuilder } from './FormInputPropertiesBuilder';
-import { ICustomProperty } from '../interface/common/CustomProperty.interface';
+import { IKeyAny } from '../interface/common/KeyAny.interface';
 
 export class FormInputProperties implements IFormInputProperties {
   id?: string;
@@ -15,9 +15,12 @@ export class FormInputProperties implements IFormInputProperties {
   classNames: string[];
   validators: IFormInputValidator[];
   availableValues: IFormInputAvailableValue[];
-  customProperties: ICustomProperty;
+  customProps: IKeyAny;
   originalDisabledValue: boolean;
   updateId: string;
+  originalValue: any;
+  isTouched: boolean;
+  isPristine: boolean;
 
   constructor(build: IFormInputProperties) {
     this.id = build.id;
@@ -30,9 +33,12 @@ export class FormInputProperties implements IFormInputProperties {
     this.classNames = build.classNames;
     this.validators = build.validators;
     this.availableValues = build.availableValues;
-    this.customProperties = build.customProperties;
+    this.customProps = build.customProps;
     this.originalDisabledValue = build.disabled;
     this.updateId = build.updateId;
+    this.originalValue = build.originalValue;
+    this.isTouched = build.isTouched;
+    this.isPristine = build.isPristine;
   }
 
   static Builder(name: string) {

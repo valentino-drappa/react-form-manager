@@ -4,8 +4,19 @@ import { validateFormInput } from './formInputsValidator.utils';
 import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
-import { getFormValidity } from './form.utils';
-import { createUpdateId } from './formInputProperties.utils';
+import { getFormValidity, getIsFormTouched, getIsFormPristine } from './form.utils';
+import { createUpdateId, getInputAvailableValues, getInputValidators } from './formInputProperties.utils';
+import { typeBoolean } from '../constant/FormManager.constant';
+import { isValidArray } from './array.utils';
+import { isValidObject } from './object.utils';
+
+/* Form is disabled, so we need to set his value to the inputs */
+const forceDisabledInput = (formInputs: IStateInputs) => {
+  Object.keys(formInputs).forEach(x => {
+    formInputs[x].originalDisabledValue = formInputs[x].disabled;
+    formInputs[x].disabled = true;
+  });
+};
 
 const createIState = (newFormInputs: IStateInputs, currentState: IState): IState => {
   const { formProperties } = currentState;
@@ -13,6 +24,8 @@ const createIState = (newFormInputs: IStateInputs, currentState: IState): IState
     formInputs: newFormInputs,
     formProperties: {
       ...formProperties,
+      isFormTouched: formProperties.isFormTouched ? formProperties.isFormTouched : getIsFormTouched(newFormInputs),
+      isFormPristine: getIsFormPristine(newFormInputs),
       ...getFormValidity(newFormInputs, formProperties.formValidators),
     },
     lastFieldUpdated: null,
@@ -22,20 +35,46 @@ const createIState = (newFormInputs: IStateInputs, currentState: IState): IState
 const isInvalidFormStateInputs = (formStateInputs: IStateInputs | IFormInputMutation) =>
   !formStateInputs || !Object.keys(formStateInputs).length;
 
+const getUpdatedInputProps = (
+  currentFormInput: IFormInputProperties,
+  updatedFormInput: IFormInputMutationData,
+): IFormInputMutationData => {
+  const { label, disabled, classNames, validators, availableValues, customProps } = updatedFormInput;
+  return {
+    disabled: typeof disabled === typeBoolean ? disabled : currentFormInput.disabled,
+    classNames: isValidArray(classNames) ? classNames : currentFormInput.classNames,
+    validators: isValidArray(validators) ? validators : getInputValidators(validators),
+    availableValues: isValidArray(availableValues)
+      ? getInputAvailableValues(availableValues)
+      : currentFormInput.availableValues,
+    customProps: isValidObject(customProps) ? customProps : currentFormInput.customProps,
+  } as IFormInputMutationData;
+};
+
 const updateFormInputData = (currentFormInput: IFormInputProperties, updatedFormInput: IFormInputMutationData) => {
   const params = updatedFormInput || {};
-  const { value, ...restParameters } = params;
-  // need to use hasOwnProperty because we can have the property 'validators' to null/undefined
-  const validators = params.hasOwnProperty('validators') ? params.validators : currentFormInput.validators;
-  const newValue = value == null ? currentFormInput.value : value;
-  const errors = validateFormInput(newValue, validators);
+  const { value } = params;
+  let newValue;
+  let isTouched;
+  // tslint:disable-next-line:triple-equals
+
+  if (value != undefined && value !== currentFormInput.value) {
+    newValue = value;
+    isTouched = true;
+  } else {
+    newValue = currentFormInput.value;
+    isTouched = currentFormInput.isTouched;
+  }
+  const updatedInputProps = getUpdatedInputProps(currentFormInput, updatedFormInput);
+  const errors = validateFormInput(newValue, updatedInputProps.validators);
   return {
     ...currentFormInput,
     value: newValue,
+    isTouched,
+    isPristine: newValue === currentFormInput.originalValue,
     errors,
     isValid: errors.length === 0,
-    validators,
-    ...restParameters,
+    ...updatedInputProps,
     updateId: createUpdateId(newValue),
   };
 };
@@ -50,6 +89,11 @@ export const addInputs = (formInputsToAdd: IStateInputs, currentState: IState): 
   const inputList = Object.keys(formInputsToAdd).filter(x => !formInputs[x]);
   if (!inputList.length) {
     return currentState;
+  }
+
+  /* form is disabled */
+  if (currentState.formProperties.isFormDisabled === true) {
+    forceDisabledInput(formInputsToAdd);
   }
 
   /* keep order to not overwritte existing inputs */
@@ -81,8 +125,16 @@ export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentStat
     {},
   );
 
+  /* form is disabled */
+  if (currentState.formProperties.isFormDisabled === true) {
+    forceDisabledInput(updatedFormInputs);
+  }
+
   /* keep order to not overwritte updated inputs */
-  const newFormInputs = { ...formInputs, ...updatedFormInputs };
+  const newFormInputs = {
+    ...formInputs,
+    ...updatedFormInputs,
+  };
   return createIState(newFormInputs, currentState);
 };
 

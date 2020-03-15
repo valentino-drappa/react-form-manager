@@ -1,11 +1,13 @@
-import { IFormInputProperties } from '../forminput/FormInputProperties.interface';
-import { IFormValidator } from '../..';
-import { ICustomProperty } from '../common/CustomProperty.interface';
+import { IFormValidator } from './FormValidatior.interface';
+import { IKeyAny } from '../common/KeyAny.interface';
 
 export interface IStateFormProperties {
-  formValidators: IFormValidator[];
   isFormDisabled: boolean;
+  isFormTouched: boolean;
+  isFormPristine: boolean;
   isFormValid: boolean;
   formErrors: string[];
-  formCustomProperties: ICustomProperty;
+  formValidators: IFormValidator[];
+  formClasseNames: string[];
+  formCustomsProps: IKeyAny;
 }

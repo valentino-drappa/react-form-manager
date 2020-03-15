@@ -1,7 +1,7 @@
 import { IFormAction } from '../interface/form/FormAction.interface';
 import { IState } from '../interface/form/State.interface';
 import { EFormActionType } from '../enum/FormActionType.enum';
-import { handleInputChange, resetState, updateFormProperties } from '../utils/form.utils';
+import { handleInputChange, resetState, setFormProperties } from '../utils/form.utils';
 import { addInputs, removeInputs, updateInputs, validateInputs } from '../utils/formInputs.utils';
 
 export const FormReducer = (state: IState, action: IFormAction): IState => {
@@ -18,8 +18,8 @@ export const FormReducer = (state: IState, action: IFormAction): IState => {
       return validateInputs(action.payload, state);
     case EFormActionType.RESET:
       return resetState(action.payload);
-    case EFormActionType.UPDATE_FORM_PROPS:
-      return updateFormProperties(action.payload, state);
+    case EFormActionType.SET_FORM_PROPS:
+      return setFormProperties(action.payload, state);
     default:
       return state;
   }
