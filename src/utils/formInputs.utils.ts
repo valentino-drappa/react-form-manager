@@ -51,7 +51,11 @@ const getUpdatedInputProps = (
   } as IFormInputMutationData;
 };
 
-const updateFormInputData = (currentFormInput: IFormInputProperties, updatedFormInput: IFormInputMutationData) => {
+const updateFormInputData = (
+  currentFormInput: IFormInputProperties,
+  updatedFormInput: IFormInputMutationData,
+  forceInputIsTouched: boolean,
+) => {
   const params = updatedFormInput || {};
   const { value } = params;
   let newValue;
@@ -63,7 +67,7 @@ const updateFormInputData = (currentFormInput: IFormInputProperties, updatedForm
     isTouched = true;
   } else {
     newValue = currentFormInput.value;
-    isTouched = currentFormInput.isTouched;
+    isTouched = forceInputIsTouched === true ? true : currentFormInput.isTouched;
   }
   const updatedInputProps = getUpdatedInputProps(currentFormInput, updatedFormInput);
   const errors = validateFormInput(newValue, updatedInputProps.validators);
@@ -101,7 +105,11 @@ export const addInputs = (formInputsToAdd: IStateInputs, currentState: IState): 
   return createIState(newFormInputs, currentState);
 };
 
-export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentState: IState): IState => {
+export const updateInputs = (
+  formInputsToUpdate: IFormInputMutation,
+  currentState: IState,
+  forceInputIsTouched: boolean,
+): IState => {
   if (isInvalidFormStateInputs(formInputsToUpdate)) {
     return currentState;
   }
@@ -119,7 +127,7 @@ export const updateInputs = (formInputsToUpdate: IFormInputMutation, currentStat
     (object, inputKey) => ({
       ...object,
       [inputKey]: {
-        ...updateFormInputData(formInputs[inputKey], formInputsToUpdate[inputKey]),
+        ...updateFormInputData(formInputs[inputKey], formInputsToUpdate[inputKey], forceInputIsTouched),
       },
     }),
     {},
@@ -163,5 +171,5 @@ export const validateInputs = (inputNameList: string[], currentState: IState): I
       {},
     ) as IFormInputMutation;
   // updateInputs will validate the input
-  return updateInputs(formInputsMutation, currentState);
+  return updateInputs(formInputsMutation, currentState, true);
 };

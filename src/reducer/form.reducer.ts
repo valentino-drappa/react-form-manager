@@ -13,7 +13,7 @@ export const FormReducer = (state: IState, action: IFormAction): IState => {
     case EFormActionType.REMOVE_INPUTS:
       return removeInputs(action.payload, state);
     case EFormActionType.UPDATE_INPUTS:
-      return updateInputs(action.payload, state);
+      return updateInputs(action.payload, state, false);
     case EFormActionType.VALIDATE_INPUTS:
       return validateInputs(action.payload, state);
     case EFormActionType.RESET:
