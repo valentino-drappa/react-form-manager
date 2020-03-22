@@ -43,7 +43,7 @@ const getUpdatedInputProps = (
   return {
     disabled: typeof disabled === typeBoolean ? disabled : currentFormInput.disabled,
     classNames: isValidArray(classNames) ? classNames : currentFormInput.classNames,
-    validators: isValidArray(validators) ? validators : getInputValidators(validators),
+    validators: isValidArray(validators) ? getInputValidators(validators) : currentFormInput.validators,
     availableValues: isValidArray(availableValues)
       ? getInputAvailableValues(availableValues)
       : currentFormInput.availableValues,
