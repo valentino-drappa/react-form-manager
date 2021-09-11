@@ -181,7 +181,7 @@ export const validateInputs = (inputNameList: string[], currentState: IState): I
   return updateInputs(formInputsMutation, currentState, true);
 };
 
-export const inputValueAreEquals = (currentValue: any, newValue: any): Boolean => {
+export const inputValueAreEquals = (currentValue: any, newValue: any): boolean => {
   const currentType: string = typeof currentValue;
   const newValueType: string = typeof newValue;
 
