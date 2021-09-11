@@ -1,13 +1,13 @@
+import { typeBoolean } from '../constant/FormManager.constant';
+import { IState } from '../interface/form/State.interface';
 import { IStateInputs } from '../interface/form/StateInptus.interface';
 import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
-import { validateFormInput } from './formInputsValidator.utils';
-import { IState } from '../interface/form/State.interface';
 import { IFormInputMutation } from '../interface/forminput/mutation/FormInputMutation.interface';
 import { IFormInputMutationData } from '../interface/forminput/mutation/FormInputMutationData.interface';
-import { getFormValidity, getIsFormTouched, getIsFormPristine } from './form.utils';
-import { createUpdateId, getInputAvailableValues, getInputValidators } from './formInputProperties.utils';
-import { typeBoolean } from '../constant/FormManager.constant';
 import { isValidArray } from './array.utils';
+import { getFormValidity, getIsFormPristine, getIsFormTouched } from './form.utils';
+import { createUpdateId, getInputAvailableValues, getInputValidators } from './formInputProperties.utils';
+import { validateFormInput } from './formInputsValidator.utils';
 import { isValidObject } from './object.utils';
 
 /* Form is disabled, so we need to set his value to the inputs */
@@ -41,6 +41,7 @@ const getUpdatedInputProps = (
 ): IFormInputMutationData => {
   const { label, disabled, classNames, validators, availableValues, customProps } = updatedFormInput;
   return {
+    label: Boolean(label) ? label : currentFormInput.label,
     disabled: typeof disabled === typeBoolean ? disabled : currentFormInput.disabled,
     classNames: isValidArray(classNames) ? classNames : currentFormInput.classNames,
     validators: isValidArray(validators) ? getInputValidators(validators) : currentFormInput.validators,
@@ -57,25 +58,31 @@ const updateFormInputData = (
   forceInputIsTouched: boolean,
 ) => {
   const params = updatedFormInput || {};
-  const { value } = params;
+  const { value, resetIsPristine } = params;
   let newValue;
   let isTouched;
 
   // tslint:disable-next-line:triple-equals
-  if (value != undefined && value !== currentFormInput.value) {
+  if (value != undefined && !inputValueAreEquals(value, currentFormInput.value)) {
     newValue = value;
     isTouched = true;
   } else {
     newValue = currentFormInput.value;
     isTouched = forceInputIsTouched === true ? true : currentFormInput.isTouched;
   }
+
+  if (Boolean(resetIsPristine) && Boolean(value)) {
+    currentFormInput.value = value;
+    currentFormInput.originalValue = value;
+  }
+
   const updatedInputProps = getUpdatedInputProps(currentFormInput, updatedFormInput);
   const errors = validateFormInput(newValue, updatedInputProps.validators);
   return {
     ...currentFormInput,
     value: newValue,
     isTouched,
-    isPristine: newValue === currentFormInput.originalValue,
+    isPristine: inputValueAreEquals(newValue, currentFormInput.originalValue),
     errors,
     isValid: errors.length === 0,
     ...updatedInputProps,
@@ -172,4 +179,35 @@ export const validateInputs = (inputNameList: string[], currentState: IState): I
     ) as IFormInputMutation;
   // updateInputs will validate the input
   return updateInputs(formInputsMutation, currentState, true);
+};
+
+export const inputValueAreEquals = (currentValue: any, newValue: any): Boolean => {
+  const currentType: string = typeof currentValue;
+  const newValueType: string = typeof newValue;
+
+  if (currentType !== newValueType) {
+    return false;
+  }
+
+  switch (currentType.toLowerCase()) {
+    case 'string': {
+      return (
+        currentValue
+          .split(',')
+          .sort()
+          .join('') ===
+        newValue
+          .split(',')
+          .sort()
+          .join('')
+      );
+    }
+    case 'object':
+      return JSON.stringify(currentValue) === JSON.stringify(newValue);
+    case 'function':
+    case 'symbol':
+      return false;
+    default:
+      return currentValue === newValue;
+  }
 };
