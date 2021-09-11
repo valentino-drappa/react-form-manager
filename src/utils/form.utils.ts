@@ -1,16 +1,17 @@
-import { IStateInputs } from '../interface/form/StateInptus.interface';
-import { IState } from '../interface/form/State.interface';
-import { validateFormInput } from './formInputsValidator.utils';
-import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
-import { validateForm } from './formValidator.utils';
-import { IFormValidator } from '../interface/form/FormValidatior.interface';
 import { IFormInitalState } from '..';
-import { isValidArray } from './array.utils';
-import { IFormPropertiesMutation } from '../interface/form/mutation/FormPropertiesMutation.interface';
-import { updateFormInputDisabledValue, createUpdateId } from './formInputProperties.utils';
 import { typeBoolean, typeCheckbox } from '../constant/FormManager.constant';
-import { isValidObject } from './object.utils';
 import { IKeyAny } from '../interface/common/KeyAny.interface';
+import { IFormValidator } from '../interface/form/FormValidatior.interface';
+import { IFormPropertiesMutation } from '../interface/form/mutation/FormPropertiesMutation.interface';
+import { IState } from '../interface/form/State.interface';
+import { IStateInputs } from '../interface/form/StateInptus.interface';
+import { IFormInputProperties } from '../interface/forminput/FormInputProperties.interface';
+import { isValidArray } from './array.utils';
+import { createUpdateId, updateFormInputDisabledValue } from './formInputProperties.utils';
+import { inputValueAreEquals } from './formInputs.utils';
+import { validateFormInput } from './formInputsValidator.utils';
+import { validateForm } from './formValidator.utils';
+import { isValidObject } from './object.utils';
 
 const getCheckBoxValue = (checked: boolean, value: any, formInputProps: IFormInputProperties) => {
   const hasMultipleValues = formInputProps.availableValues.length > 0;
@@ -95,7 +96,7 @@ export const handleInputChange = (
     value: _inputValue,
     isValid: errors.length === 0,
     isTouched: true,
-    isPristine: _inputValue === currentFormInputData.originalValue,
+    isPristine: inputValueAreEquals(_inputValue, currentFormInputData.originalValue),
     errors,
     updateId: createUpdateId(_inputValue),
   };
