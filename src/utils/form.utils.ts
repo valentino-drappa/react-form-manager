@@ -90,7 +90,7 @@ export const handleInputChange = (
   }
 
   const currentFormInputData: IFormInputProperties = formInputs[name];
-  const errors = validateFormInput(value, currentFormInputData.validators);
+  const errors = validateFormInput(_inputValue, currentFormInputData.validators);
   const formInputDataUpdated = {
     ...currentFormInputData,
     value: _inputValue,
