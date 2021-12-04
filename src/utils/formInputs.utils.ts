@@ -71,6 +71,7 @@ const updateFormInputData = (
     isTouched = forceInputIsTouched ? true : currentFormInput.isTouched;
   }
 
+  // tslint:disable-next-line:triple-equals
   if (Boolean(resetIsPristine) && value != undefined) {
     currentFormInput.value = value;
     currentFormInput.originalValue = value;
