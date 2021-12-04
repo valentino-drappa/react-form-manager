@@ -68,12 +68,13 @@ const updateFormInputData = (
     isTouched = true;
   } else {
     newValue = currentFormInput.value;
-    isTouched = forceInputIsTouched === true ? true : currentFormInput.isTouched;
+    isTouched = forceInputIsTouched ? true : currentFormInput.isTouched;
   }
 
   if (Boolean(resetIsPristine) && Boolean(value)) {
     currentFormInput.value = value;
     currentFormInput.originalValue = value;
+    isTouched = forceInputIsTouched ? true : false;
   }
 
   const updatedInputProps = getUpdatedInputProps(currentFormInput, updatedFormInput);
