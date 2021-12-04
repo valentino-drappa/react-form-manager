@@ -71,7 +71,7 @@ const updateFormInputData = (
     isTouched = forceInputIsTouched ? true : currentFormInput.isTouched;
   }
 
-  if (Boolean(resetIsPristine) && Boolean(value)) {
+  if (Boolean(resetIsPristine) && value != undefined) {
     currentFormInput.value = value;
     currentFormInput.originalValue = value;
     isTouched = forceInputIsTouched ? true : false;
